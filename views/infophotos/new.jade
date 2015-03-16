@@ -1,0 +1,61 @@
+extends ../layout
+
+block content
+	h1.
+		EMC {code} Photobooth
+	form#formAddInfophoto(name="addinfophoto",method="post",action="/infophotos")
+		p First Name: 
+			input#inputFirstName(type="text", placeholder="ex. Joe", name="fname")
+		p Last Name: 
+			input#inputLastName(type="text", placeholder="ex. Tucci", name="lname")
+		p Twitter Username: 
+			input#inputTwitter(type="text", placeholder="@EMCCode", name="twitter")
+		p Company: 
+			input#inputCompany(type="text", placeholder="EMC", name="company")
+		p Title: 
+			input#inputTitle(type="text", placeholder="CEO", name="title")
+		p Do you want to subscribe to the EMC {code} Newsletter? 
+			br
+			input#inputNewsletter(type="checkbox", name="newsletter")
+			| Heck Yes!
+		p Which demo was your favorite? 
+			br
+			input#inputFavDemo(type="radio", name="favoritedemo", value="s3motion")
+			| s3motion
+			br
+			input#inputFavDemo(type="radio", name="favoritedemo", value="Socieidos")
+			| Socieidos
+			br
+			input#inputFavDemo(type="radio", name="favoritedemo", value="Vagrant-ScaleIO")
+			| Vagrant-ScaleIO
+			br
+			input#inputFavDemo(type="radio", name="favoritedemo", value="VagrantSpice")
+			| VagrantSpice
+			br
+			input#inputFavDemo(type="radio", name="favoritedemo", value="Dockerized ScaleIO")
+			| Dockerized ScaleIO
+			br
+			input#inputFavDemo(type="radio", name="favoritedemo", value="SnakeCharmer")
+			| Snake Charmer
+			br
+			input#inputFavDemo(type="radio", name="favoritedemo", value="Dockerized SymCLI")
+			| Dockerized SymCLI
+			br
+			input#inputFavDemo(type="radio", name="favoritedemo", value="NSX Tier Builder")
+			| NSX Tier Builder
+		p What technologies do you want to learn more about? 
+			br
+			input#inputTopics(type="checkbox", name="interests", value="Docker")
+			| Docker
+			br
+			input#inputTopics(type="checkbox", name="interests", value="CoreOS")
+			| CoreOS
+			br
+			input#inputTopics(type="checkbox", name="interests", value="KungFu")
+			| Kung Fu
+			br
+			input#inputTopics(type="checkbox", name="interests", value="UK Basketball")
+			| UK Basketball
+			br
+		p 
+		button#btnSubmit(type="submit") Put Me In The Queue!
