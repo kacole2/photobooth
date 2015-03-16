@@ -18,8 +18,8 @@ block content
                     = infophoto.date
                     = infophoto.interests
                     = infophoto._id
-                    form(action='/infophotos/#{infophoto._id}',method='post',enctype='application/x-www-form-urlencoded')
+                    form(action='/infophotos/#{infophoto.uniqueurl}/edit',method='post',enctype='application/x-www-form-urlencoded')
                         input(type='hidden',value='DELETE',name='_method')
                         button(type='submit').
                             Delete
-                    a(href='/infophotos/#{infophoto._id}') Edit
+                    a(href='/infophotos/#{infophoto.uniqueurl}/edit') Edit

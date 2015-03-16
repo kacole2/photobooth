@@ -110,12 +110,12 @@ router.get('/new', function(req, res) {
     res.render('infophotos/new', { title: 'Add New infophoto' });
 });
 
-// route middleware to validate :id
-router.param('id', function(req, res, next, id) {
-    //console.log('validating ' + id + ' exists');
-    mongoose.model('Infophoto').findById(id, function (err, infophoto) {
+// route middleware to validate :uniqueurl
+router.param('uniqueurl', function(req, res, next, uniqueurl) {
+    //console.log('validating ' + uniqueurl + ' exists');
+    mongoose.model('Infophoto').findOne({uniqueurl: uniqueurl}, function (err, infophoto) {
 		if (err) {
-			console.log(id + ' was not found');
+			console.log(uniqueurl + ' was not found');
 			res.status(404)
 			var err = new Error('Not Found');
 			err.status = 404;
@@ -130,20 +130,41 @@ router.param('id', function(req, res, next, id) {
 		} else {
 			//console.log(infophoto);
 			// once validation is done save the new item in the req
-			req.id = id;
+			req.uniqueurl = uniqueurl;
 			// go to the next thing
     		next(); 
 		} 
 	});
 });
 
-router.route('/:id')
+router.route('/:uniqueurl')
 	.get(function(req, res) {
-		mongoose.model('Infophoto').findById(req.id, function (err, infophoto) {
+		mongoose.model('Infophoto').findOne({uniqueurl : req.uniqueurl}, function (err, infophoto) {
 			if (err) {
 				console.log('GET Error: There was a problem retrieving: ' + err);
 			} else {
-				console.log('GET Retrieving ID: ' + infophoto._id);
+				console.log('GET Retrieving uniqueurl: ' + infophoto.uniqueurl);
+				res.format({
+					html: function(){
+					   	res.render('infophotos/show', {
+					  		"infophoto" : infophoto
+				  		});
+				 	},
+					json: function(){
+				   		res.json(infophoto);
+				 	}
+				});
+			}
+		});
+	});
+
+router.route('/:uniqueurl/edit')
+	.get(function(req, res) {
+		mongoose.model('Infophoto').findOne({uniqueurl : req.params.uniqueurl}, function (err, infophoto) {
+			if (err) {
+				console.log('GET Error: There was a problem retrieving: ' + err);
+			} else {
+				console.log('GET Retrieving uniqueurl: ' + infophoto.uniqueurl);
 				res.format({
 					html: function(){
 					   	res.render('infophotos/edit', {
@@ -168,8 +189,8 @@ router.route('/:id')
 	    var interests = req.body.interests;
 	    var favoritedemo = req.body.favoritedemo;
 
-	    //find the document by ID and then update it
-		mongoose.model('Infophoto').findById(req.id, function (err, infophoto) {
+	    //find the document by uniqueurl and then update it
+		mongoose.model('Infophoto').findOne({uniqueurl : req.params.uniqueurl}, function (err, infophoto) {
 			infophoto.update({
 		    	fname : fname,
 		    	lname : lname,
@@ -185,10 +206,10 @@ router.route('/:id')
 			  	res.send("There was a problem updating the information to the database: " + err);
 			  } 
 			  else {
-			  		//console.log('PUT updating ID: ' + infophoto._id);
+			  		//console.log('PUT updating uniqueurl: ' + infophoto.uniqueurl);
 			  		res.format({
 			  			html: function(){
-						   	res.redirect("/infophotos/" + infophoto._id);
+						   	res.redirect("/infophotos/" + infophoto.uniqueurl);
 					 	},
 						json: function(){
 					   		res.json(infophoto);
@@ -199,7 +220,7 @@ router.route('/:id')
 		});
 	})
 	.delete(function (req, res){
-		mongoose.model('Infophoto').findById(req.id, function (err, infophoto) {
+		mongoose.model('Infophoto').findOne({uniqueurl : req.params.uniqueurl}, function (err, infophoto) {
 			if (err) {
 				return console.error(err);
 			} else {
@@ -207,7 +228,7 @@ router.route('/:id')
 					if (err) {
 						return console.error(err);
 					} else {
-						console.log('DELETE removing ID: ' + infophoto._id);
+						console.log('DELETE removing uniqueurl: ' + infophoto.uniqueurl);
 						res.format({
 				  			html: function(){
 							   	res.redirect("/infophotos");

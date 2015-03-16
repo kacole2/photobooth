@@ -1,0 +1,13 @@
+extends ../layout
+
+block content
+    h1(class='center').
+        Infophoto #{infophoto.uniqueurl}
+    p First Name: #{infophoto.fname}
+    p Last Name: #{infophoto.lname}'
+    p Twitter Username: #{infophoto.twitter}
+    p Company: #{infophoto.company}
+    p Title: #{infophoto.title}
+    p Do you want to subscribe to the EMC {code} Newsletter? #{infophoto.newsletter}
+    p Which demo was your favorite? #{infophoto.favoritedemo}
+    p What technologies do you want to learn more about? #{infophoto.interests}

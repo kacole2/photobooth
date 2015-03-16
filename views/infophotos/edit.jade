@@ -3,7 +3,7 @@ extends ../layout
 block content
     h1(class='center').
         Infophoto #{infophoto.uniqueurl}
-    form(action='/infophotos/#{infophoto._id}',method='post',name='updateinfophoto',enctype='application/x-www-form-urlencoded')
+    form(action='/infophotos/#{infophoto.uniqueurl}/edit',method='post',name='updateinfophoto',enctype='application/x-www-form-urlencoded')
       p First Name: 
         input#inputFirstName(type="text", value='#{infophoto.fname}', name="fname")
       p Last Name: 
