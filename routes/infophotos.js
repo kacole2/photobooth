@@ -245,4 +245,25 @@ router.route('/:uniqueurl/edit')
 		});
 	});
 
+/* GET New Infophoto page. */
+router.get('/list', function(req, res) {
+    mongoose.model('Infophoto').find({photos : 'undefined'}, function (err, infophotos) {
+		if (err) {
+			console.log('GET Error: There was a problem retrieving: ' + err);
+		} else {
+			//console.log('GET Retrieving all empty infophotos: ' + infophotos);
+			res.format({
+				html: function(){
+				   	res.render('infophotos/list', {
+				  		"infophotos" : infophotos
+			  		});
+			 	},
+				json: function(){
+			   		res.json(infophoto);
+			 	}
+			});
+		}
+	});
+});
+
 module.exports = router;
