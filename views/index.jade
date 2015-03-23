@@ -1,5 +1,5 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+	form#formStart(name="getStarted",method="get",action="/infophotos/new")
+		button#btnStart(type="submit") Click Here To Get Started!
