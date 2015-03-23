@@ -3,7 +3,15 @@ var express = require('express'),
 	mongoose = require('mongoose'),
 	bodyParser = require('body-parser'),
 	methodOverride = require('method-override'),
-	async = require('async');
+	async = require('async'),
+	nconf = require('nconf'),
+	AWS = require('aws-sdk');
+
+nconf.file('creds.json');
+var S3accessKeyId = nconf.get('S3accessKeyId'),
+    S3secretAccessKey = nconf.get('S3secretAccessKey'),
+    S3endpoint = nconf.get('S3endpoint'),
+    S3url = nconf.get('S3url');
 
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(methodOverride(function(req, res){
@@ -39,6 +47,7 @@ router.route('/')
 	    // Get our form values. These rely on the "name" attributes
 	    var fname = req.body.fname;
 	    var lname = req.body.lname;
+	    var email = req.body.email;
 	    var twitter = req.body.twitter;
 	    var company = req.body.company;
 	    var title = req.body.title;
@@ -68,6 +77,7 @@ router.route('/')
 		    				mongoose.model('Infophoto').create({
 						    	fname : fname,
 						    	lname : lname,
+						    	email : email,
 						    	twitter : twitter,
 						    	company : company,
 						    	title : title,
@@ -110,11 +120,100 @@ router.get('/new', function(req, res) {
     res.render('infophotos/new', { title: 'Add New infophoto' });
 });
 
+/* GET List of Pictures to be taken */
+router.get('/list', function(req, res) {
+    mongoose.model('Infophoto').find({photos : []}, function (err, infophotos) {
+		if (err) {
+			console.log('GET Error: There was a problem retrieving: ' + err);
+		} else {
+			//console.log('GET Retrieving all empty infophotos: ' + infophotos);
+			res.format({
+				html: function(){
+				   	res.render('infophotos/list', {
+				  		"infophotos" : infophotos
+			  		});
+			 	},
+				json: function(){
+			   		res.json(infophoto);
+			 	}
+			});
+		}
+	});
+});
+
+/* GET Take Pictures */
+router.get('/takepic/:uniqueurl', function(req, res) {
+    mongoose.model('Infophoto').findOne({uniqueurl : req.params.uniqueurl}, function (err, infophoto) {
+		if (err) {
+			console.log('GET Error: There was a problem retrieving: ' + err);
+		} else {
+			//console.log('GET Retrieving all empty infophotos: ' + infophotos);
+			res.format({
+				html: function(){
+				   	res.render('infophotos/takepic', {
+				  		"infophoto" : infophoto
+			  		});
+			 	}
+			});
+		}
+	});
+});
+
+/* GET Take Pictures */
+router.post('/addpic/:uniqueurl', function(req, res) {
+	buf = new Buffer(req.body.photo.replace(/^data:image\/\w+;base64,/, ""),'base64')
+    var s3 = new AWS.S3({accessKeyId: S3accessKeyId, secretAccessKey: S3secretAccessKey});
+    var params = {
+		Bucket: 'emcphotobooth', /* required */
+		Key: req.params.uniqueurl + '/' + req.body.number + '.png', /* required */
+		ACL: 'public-read',
+		Body: buf,
+		ContentType:  'image/png',
+		ContentEncoding: 'base64'
+	};
+	s3.putObject(params, function(err, data) {
+		if (err) console.log(err, err.stack); // an error occurred
+		else     console.log(data);           // successful response
+	});
+
+	mongoose.model('Infophoto').findOneAndUpdate({uniqueurl : req.params.uniqueurl},
+			{$push: {'photos': 'https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/' + req.body.number + '.png'}},
+		    {safe: true, upsert: true},
+		    function(err, model) {
+		        //console.log(err);
+		        //console.log(model);
+		    }
+	);
+
+	res.format({
+		text: function(){
+			res.send('success');
+	 	},
+		json: function(){
+	   		res.json({message : 'success'});
+	 	}
+	});
+
+});
+
 // route middleware to validate :uniqueurl
 router.param('uniqueurl', function(req, res, next, uniqueurl) {
     //console.log('validating ' + uniqueurl + ' exists');
     mongoose.model('Infophoto').findOne({uniqueurl: uniqueurl}, function (err, infophoto) {
 		if (err) {
+			console.log(uniqueurl + ' was not found');
+			res.status(404)
+			var err = new Error('Not Found');
+			err.status = 404;
+			res.format({
+				html: function(){
+					next(err);
+			 	},
+				json: function(){
+			   		res.json({message : err.status  + ' ' + err});
+			 	}
+			});
+		} else if (infophoto === null) {
 			console.log(uniqueurl + ' was not found');
 			res.status(404)
 			var err = new Error('Not Found');
@@ -139,7 +238,7 @@ router.param('uniqueurl', function(req, res, next, uniqueurl) {
 
 router.route('/:uniqueurl')
 	.get(function(req, res) {
-		mongoose.model('Infophoto').findOne({uniqueurl : req.uniqueurl}, function (err, infophoto) {
+		mongoose.model('Infophoto').findOne({uniqueurl : req.params.uniqueurl}, function (err, infophoto) {
 			if (err) {
 				console.log('GET Error: There was a problem retrieving: ' + err);
 			} else {
@@ -244,26 +343,5 @@ router.route('/:uniqueurl/edit')
 			}
 		});
 	});
-
-/* GET New Infophoto page. */
-router.get('/list', function(req, res) {
-    mongoose.model('Infophoto').find({photos : 'undefined'}, function (err, infophotos) {
-		if (err) {
-			console.log('GET Error: There was a problem retrieving: ' + err);
-		} else {
-			//console.log('GET Retrieving all empty infophotos: ' + infophotos);
-			res.format({
-				html: function(){
-				   	res.render('infophotos/list', {
-				  		"infophotos" : infophotos
-			  		});
-			 	},
-				json: function(){
-			   		res.json(infophoto);
-			 	}
-			});
-		}
-	});
-});
 
 module.exports = router;

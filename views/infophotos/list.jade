@@ -1,0 +1,11 @@
+extends ../layout
+
+block content
+	h1(class='center').
+		Choose Yourself!
+	ul
+		- each infophoto, i in infophotos
+			li
+				p
+					= infophoto.fname
+					a(href='/infophotos/takepic/#{infophoto.uniqueurl}') Take Pics
