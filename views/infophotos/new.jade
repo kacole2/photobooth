@@ -4,15 +4,17 @@ block content
 	h1.
 		EMC {code} Photobooth
 	form#formAddInfophoto(name="addinfophoto",method="post",action="/infophotos")
-		p First Name: 
-			input#inputFirstName(type="text", placeholder="ex. Joe", name="fname")
-		p Last Name: 
-			input#inputLastName(type="text", placeholder="ex. Tucci", name="lname")
+		p First Name *: 
+			input#inputFirstName(type="text", placeholder="ex. EMC", name="fname")
+		p Last Name *: 
+			input#inputLastName(type="text", placeholder="ex. Code", name="lname")
+		p Email *: 
+			input#inputEmail(type="text", placeholder="ex. emccode@emc.com", name="email")
 		p Twitter Username: 
 			input#inputTwitter(type="text", placeholder="@EMCCode", name="twitter")
-		p Company: 
+		p Company *: 
 			input#inputCompany(type="text", placeholder="EMC", name="company")
-		p Title: 
+		p Title *: 
 			input#inputTitle(type="text", placeholder="CEO", name="title")
 		p Do you want to subscribe to the EMC {code} Newsletter? 
 			br

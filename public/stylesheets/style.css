@@ -6,3 +6,44 @@ body {
 a {
   color: #00B7FF;
 }
+
+
+
+#camera {
+	width: 60%; 
+	height: 600px;
+	float: left;
+	margin: 0;
+	padding: 0;
+	position: relative;
+}
+
+#thecam {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+#takenpics {
+	width: 40%;
+	float: right;
+}
+
+#spot {
+	list-style: none;
+	width: 100%
+}
+
+#spot li{
+	width: 47%;
+	padding: 1%;
+	list-style: none;
+	float: left;
+}
+
+#photo1 img, #photo2 img, #photo3 img, #photo4 img {
+	width: 100%; 
+	height: 100%;
+}

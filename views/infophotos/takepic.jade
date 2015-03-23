@@ -1,0 +1,134 @@
+extends ../layout
+
+block content
+	script(src='/javascripts/webcam.min.js')
+	h1.
+		#{infophoto.uniqueurl}
+	div#camera
+		div#thecam
+	div#takenpics
+		ul#spot
+			li
+				div#photo1
+			li
+				div#photo2
+			li
+				div#photo3
+			li
+				div#photo4
+	div#thanks
+		p Check out your photos at http://emccodebooth.cfapps.io/infophotos/#{infophoto.uniqueurl}
+		p An email has been sent to #{infophoto.email}
+		p Or check for a tweet from @EMCCodeBooth to #{infophoto.twitter}
+
+	script(type='text/javascript').
+		$( document ).ready(function() {
+			$("#thanks").hide();
+			Webcam.set({
+				dest_width: 640,
+				dest_height: 480,
+				image_format: 'png',
+				jpeg_quality: 90
+			});
+			Webcam.attach('thecam');
+			$("#photo1").append('<img id="countdown_gif" src="/images/countdown-black00.gif" />') 
+			var photobooth_photos = [];
+			clear_gif();
+			setTimeout(
+				function() 
+			{
+				take_snapshot1();
+			}, 5000);
+
+			function take_snapshot1() {
+				$("#photo1 img").remove();
+				Webcam.snap( function(data_uri) {
+					document.getElementById('photo1').innerHTML = '<img src="'+data_uri+'"/>';
+					post_photo(data_uri, 'photo1');
+					$("#photo2").append('<img id="countdown_gif" src="/images/countdown-black00.gif" />')
+					clear_gif();
+		
+					setTimeout(
+						function() 
+					{
+						take_snapshot2();
+					}, 5000);
+
+				});
+				
+			}
+
+			function take_snapshot2() {
+				$("#photo2 img").remove();
+				Webcam.snap( function(data_uri) {
+					document.getElementById('photo2').innerHTML = '<img src="'+data_uri+'"/>';
+					post_photo(data_uri, 'photo2');
+					$("#photo3").append('<img id="countdown_gif" src="/images/countdown-black00.gif" />')
+					clear_gif(); 
+					setTimeout(
+						function() 
+					{
+						take_snapshot3();
+					}, 5000);
+
+				});
+			}
+
+			function take_snapshot3() {
+				$("#photo3 img").remove();
+				Webcam.snap( function(data_uri) {
+					document.getElementById('photo3').innerHTML = '<img src="'+data_uri+'"/>';
+					post_photo(data_uri, 'photo3')
+					$("#photo4").append('<img id="countdown_gif" src="/images/countdown-black00.gif" />')
+					clear_gif();
+					setTimeout(
+						function() 
+					{
+						take_snapshot4();
+					}, 5000);
+				});
+			}
+
+			function take_snapshot4() {
+				$("#photo4 img").remove();
+				Webcam.snap( function(data_uri) {
+					document.getElementById('photo4').innerHTML = '<img src="'+data_uri+'"/>';
+					post_photo(data_uri, 'photo4')
+					$("#photo4").show();
+				});
+				clear_it();
+			}
+
+			function clear_it() {
+				setTimeout(
+					function() 
+				{
+					Webcam.reset();
+					$("#camera").hide();
+					$("#takenpics").hide();
+					$("#thanks").show();
+
+					setTimeout(
+						function() 
+					{
+						var url = window.location.href
+						var goToList = url.replace(window.location.pathname, "/infophotos/list")
+						window.location.href = goToList;
+					}, 5000);
+
+				}, 5000);
+			}
+
+			function clear_gif() {
+				var gifSource = $('#countdown_gif').attr('src'); //get the source in the var
+				$('#countdown_gif').attr('src', ""); //erase the source     
+				$('#countdown_gif').attr('src', gifSource+"?"+new Date().getTime()); //add the date to the source of the image... :-) 
+			}
+
+			function post_photo(photoData, number) {
+				jQuery.post("/infophotos/addpic/#{infophoto.uniqueurl}", {
+					"photo": photoData,
+					"number" : number
+				});
+			}
+		});
