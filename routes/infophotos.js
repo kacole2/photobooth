@@ -32,7 +32,7 @@ router.route('/')
 		  		res.format({
 					html: function(){
 				    	res.render('infophotos/index', {
-				  			title: 'All my infophotos',
+				  			title: "Everyone's Info",
 				  			"infophotos" : infophotos
 			  			});
 					},
@@ -94,10 +94,13 @@ router.route('/')
 							  		console.log('POST creating new infophoto: ' + infophoto);
 							  		res.format({
 										html: function(){
-											// If it worked, set the header so the address bar doesn't still say /adduser
-									    	res.location("infophotos");
+											res.render('infophotos/thanks', {
+										   		title: "Photobooth Registration Success"
+									  		});
+											/* If it worked, set the header so the address bar doesn't still say /adduser
+									    	res.location("Photobooth Registration Success");
 									    	// And forward to success page
-						            		res.redirect("/infophotos");
+						            		res.redirect("../");*/
 										},
 										json: function(){
 									    	res.json(infophoto);
@@ -117,7 +120,7 @@ router.route('/')
 
 /* GET New Infophoto page. */
 router.get('/new', function(req, res) {
-    res.render('infophotos/new', { title: 'Add New infophoto' });
+    res.render('infophotos/new', { title: 'Photobooth Registration' });
 });
 
 /* GET List of Pictures to be taken */
@@ -130,6 +133,7 @@ router.get('/list', function(req, res) {
 			res.format({
 				html: function(){
 				   	res.render('infophotos/list', {
+				   		title: "Waiting to Take Photos",
 				  		"infophotos" : infophotos
 			  		});
 			 	},
@@ -151,6 +155,7 @@ router.get('/takepic/:uniqueurl', function(req, res) {
 			res.format({
 				html: function(){
 				   	res.render('infophotos/takepic', {
+				   		title: "Photobooth",
 				  		"infophoto" : infophoto
 			  		});
 			 	}
@@ -246,6 +251,7 @@ router.route('/:uniqueurl')
 				res.format({
 					html: function(){
 					   	res.render('infophotos/show', {
+					   		title: "Photobooth for " + infophoto.fname,
 					  		"infophoto" : infophoto
 				  		});
 				 	},
@@ -267,6 +273,7 @@ router.route('/:uniqueurl/edit')
 				res.format({
 					html: function(){
 					   	res.render('infophotos/edit', {
+					   		title: "Edit Info for " + infophoto.fname,
 					  		"infophoto" : infophoto
 				  		});
 				 	},

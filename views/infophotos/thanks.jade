@@ -1,0 +1,16 @@
+extends ../layout
+
+block content	
+	div#thanks
+		p You're in the queue! Head over to the Photobooth!
+
+	script(type='text/javascript').
+		$( document ).ready(function() {
+			setTimeout(
+				function() 
+			{
+				var url = window.location.href;
+				var goToStart = url.replace(window.location.pathname, "");
+				window.location.href = goToStart;
+			}, 2500);
+		});
