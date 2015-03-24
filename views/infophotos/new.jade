@@ -1,63 +1,107 @@
 extends ../layout
 
 block content
-	h1.
-		EMC {code} Photobooth
-	form#formAddInfophoto(name="addinfophoto",method="post",action="/infophotos")
-		p First Name *: 
-			input#inputFirstName(type="text", placeholder="ex. EMC", name="fname")
-		p Last Name *: 
-			input#inputLastName(type="text", placeholder="ex. Code", name="lname")
-		p Email *: 
-			input#inputEmail(type="text", placeholder="ex. emccode@emc.com", name="email")
-		p Twitter Username: 
-			input#inputTwitter(type="text", placeholder="@EMCCode", name="twitter")
-		p Company *: 
-			input#inputCompany(type="text", placeholder="EMC", name="company")
-		p Title *: 
-			input#inputTitle(type="text", placeholder="CEO", name="title")
-		p Do you want to subscribe to the EMC {code} Newsletter? 
+	div#content-wrapper
+		div#banner.center
+			div#bannerImage
+				img(src='../../images/EMC-Code-Icon.png')
+			div#bannerText
+				h1 EMC {code} Photobooth Registration
+		div.clearfix
+		form#formAddInfophoto(name="addinfophoto",method="post",action="/infophotos")
+			div.addspace
+				label(for='fname', class='label') First Name: 
+					span.red *
+					input(type='text',id='fname',name='fname',placeholder='ex. EMC',class='textinput')
+			div.addspace
+				label(for='lname', class='label') Last Name:
+					span.red *
+					input(type='text',id='lname',name='lname',placeholder='ex. {code}',class='textinput')
+			div.addspace
+				label(for='email', class='label') Email:
+					span.red *
+					input(type='text',id='email',name='email',placeholder='ex. emccode@emc.com',class='textinput')
+			div.addspace
+				label(for='twitter', class='label') Twitter Username:
+					input(type='text',id='twitter',name='twitter',placeholder='ex. @EMCCode',class='textinput')
+			div.addspace
+				label(for='company', class='label') Company:
+					span.red * 
+					input(type='text',id='company',name='company',placeholder='ex. EMC',class='textinput')
+			div.addspace
+				label(for='title', class='label') Title:
+					span.red * 
+					input(type='text',id='title',name='title',placeholder='ex. CEO',class='textinput')
 			br
-			input#inputNewsletter(type="checkbox", name="newsletter")
-			| Heck Yes!
-		p Which demo was your favorite? 
 			br
-			input#inputFavDemo(type="radio", name="favoritedemo", value="s3motion")
-			| s3motion
+			div.addspace
+				label(for='newsletter', class='label') Subscribe to the EMC {code} Newsletter? 
+					input(type="checkbox",id='newsletter',name='newsletter', class='checkboxPadding')
 			br
-			input#inputFavDemo(type="radio", name="favoritedemo", value="Socieidos")
-			| Socieidos
 			br
-			input#inputFavDemo(type="radio", name="favoritedemo", value="Vagrant-ScaleIO")
-			| Vagrant-ScaleIO
+			p.label Which demo was your favorite? 
+				table
+					tr
+						td
+							label(for='s3motion', class='label') s3motion
+							input(type="radio",id='s3motion',name='favoritedemo', value='s3motion', class='checkboxPadding')
+						td
+							label(for='Socieidos', class='label') Socieidos
+							input(type="radio",id='Socieidos',name='favoritedemo', value='Socieidos', class='checkboxPadding')
+						td
+							label(for='Vagrant-ScaleIO', class='label') Vagrant-ScaleIO
+							input(type="radio",id='Vagrant-ScaleIO',name='favoritedemo', value='Vagrant-ScaleIO', class='checkboxPadding')
+						td
+							label(for='VagrantSpice', class='label') VagrantSpice
+							input(type="radio",id='VagrantSpice',name='favoritedemo', value='VagrantSpice', class='checkboxPadding')
+					tr
+						td
+							label(for='Dockerized ScaleIO', class='label') Dockerized ScaleIO
+							input(type="radio",id='Dockerized ScaleIO',name='favoritedemo', value='Dockerized ScaleIO', class='checkboxPadding')
+						td
+							label(for='SnakeCharmer', class='label') SnakeCharmer
+							input(type="radio",id='SnakeCharmer',name='favoritedemo', value='SnakeCharmer', class='checkboxPadding')
+						td
+							label(for='Dockerized SymCLI', class='label') Dockerized SymCLI
+							input(type="radio",id='Dockerized SymCLI',name='favoritedemo', value='Dockerized SymCLI', class='checkboxPadding')
+						td
+							label(for='NSX Tier Builder', class='label') NSX Tier Builder
+							input(type="radio",id='NSX Tier Builder',name='favoritedemo', value='NSX Tier Builder', class='checkboxPadding')
 			br
-			input#inputFavDemo(type="radio", name="favoritedemo", value="VagrantSpice")
-			| VagrantSpice
 			br
-			input#inputFavDemo(type="radio", name="favoritedemo", value="Dockerized ScaleIO")
-			| Dockerized ScaleIO
-			br
-			input#inputFavDemo(type="radio", name="favoritedemo", value="SnakeCharmer")
-			| Snake Charmer
-			br
-			input#inputFavDemo(type="radio", name="favoritedemo", value="Dockerized SymCLI")
-			| Dockerized SymCLI
-			br
-			input#inputFavDemo(type="radio", name="favoritedemo", value="NSX Tier Builder")
-			| NSX Tier Builder
-		p What technologies do you want to learn more about? 
-			br
-			input#inputTopics(type="checkbox", name="interests", value="Docker")
-			| Docker
-			br
-			input#inputTopics(type="checkbox", name="interests", value="CoreOS")
-			| CoreOS
-			br
-			input#inputTopics(type="checkbox", name="interests", value="KungFu")
-			| Kung Fu
-			br
-			input#inputTopics(type="checkbox", name="interests", value="UK Basketball")
-			| UK Basketball
-			br
-		p 
-		button#btnSubmit(type="submit") Put Me In The Queue!
+			p.label What technologies do you want to learn more about?
+				table
+					tr
+						td
+							label(for='Docker', class='label') Docker
+							input(type="checkbox",id='Docker',name='Docker', value='Docker', class='checkboxPadding')
+						td
+							label(for='CoreOS', class='label') CoreOS
+							input(type="checkbox",id='CoreOS',name='CoreOS', value='CoreOS', class='checkboxPadding')
+						td
+							label(for='Vagrant', class='label') Vagrant
+							input(type="checkbox",id='Vagrant',name='Vagrant', value='Vagrant', class='checkboxPadding')
+						td
+							label(for='ECS', class='label') ECS
+							input(type="checkbox",id='ECS',name='ECS', value='ECS', class='checkboxPadding')
+						td
+							label(for='Programming Languages', class='label') Programming Languages
+							input(type="checkbox",id='Programming Languages',name='Programming Languages', value='Programming Languages', class='checkboxPadding')
+						td
+							label(for='Cloud Foundry', class='label') Cloud Foundry
+							input(type="checkbox",id='Cloud Foundry',name='Cloud Foundry', value='Cloud Foundry', class='checkboxPadding')
+					tr
+						td
+							label(for='KungFu', class='label') KungFu
+							input(type="checkbox",id='KungFu',name='KungFu', value="KungFu", class='checkboxPadding')
+						td
+							label(for='UK Basketball', class='label') UK Basketball
+							input(type="checkbox",id='UK Basketball',name='UK Basketball', value="UK Basketball", class='checkboxPadding')
+						td
+							label(for='Sweden', class='label') Sweden
+							input(type="checkbox",id='Sweden',name='Sweden', value="Sweden", class='checkboxPadding')
+						td
+							label(for='Da Partiez!', class='label') Da Partiez!
+							input(type="checkbox",id='Da Partiez!',name='Da Partiez!', value="Da Partiez!", class='checkboxPadding')
+				br
+			button#btnSubmit(type="submit").center Put Me In The Queue!

@@ -1,20 +1,27 @@
 extends ../layout
 
 block content
-	h1(class='center').
-		Choose Yourself!
-	ul
-		- each infophoto, i in infophotos
-			li
-				p
-					= infophoto.fname
-					a(href='/infophotos/takepic/#{infophoto.uniqueurl}') Take Pics
+	div#content-wrapper
+		div#banner.center
+			div#bannerImage
+				img(src='../../images/EMC-Code-Icon.png')
+			div#bannerText
+				h1 Choose Your Name To Get Started
+		div.clearfix
+		ul#list
+			- each infophoto, i in infophotos
+				li
+					div#itemLeft
+						h2.
+							#{infophoto.fname} #{infophoto.lname}
+					div#itemRight
+						a(href='/infophotos/takepic/#{infophoto.uniqueurl}' class='btn') Take Photobooth Photos!
 
-	script(type='text/javascript').
-		$( document ).ready(function() {
-			setTimeout(
-				function() 
-			{
-				location.reload(true);
-			}, 35000);
-		});
+		script(type='text/javascript').
+			/*$( document ).ready(function() {
+				setTimeout(
+					function() 
+				{
+					location.reload(true);
+				}, 35000);
+			});*/

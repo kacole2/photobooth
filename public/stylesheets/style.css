@@ -1,13 +1,122 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+/* http://emccode.github.io
+   v1.0 | 20140907
+   License: none (public domain)
+*/
+
+/****************************
+  COMMON STYLES
+****************************/
+html {
+  background: url('../images/bg_blur.png') no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+h1, h2, h3, h4, .label {
+  font-family: 'Exo', sans-serif;
+  padding: 0;
+  color: #FFFFFF;
+  text-shadow: 3px 4px 8px #666;
+}
+
+h1 {
+  font-size: 2.76em;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 1.76em;
+  font-weight: 500;
+}
+
+h3 {
+  font-size: 1.35em;
+  font-weight: 400;
+}
+
+h4 {
+  font-size: 1em;
+  font-weight: 400;
+  margin: 25px 0px 10px;
+}
+
+p, td {
+  font-family: 'Quattrocento Sans', sans-serif;
+  font-weight: 400;
+  font-size: .95em;
+  color: #FFFFFF;
 }
 
 a {
-  color: #00B7FF;
+  font-family: 'Quattrocento Sans', sans-serif;
+  font-weight: 400;
+  font-size: .96em;
+  color: #3F3F3F;
+  text-decoration: none;
+  transition: all .25s ease-in-out;
 }
 
-#btnStart {
+a:hover {
+  /*color: #32a7e4;*/
+  color: #FFFFFF;
+}
+
+#content-wrapper {
+  padding: 25px 0% 50px;
+  max-width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.center {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.nomargin {
+  margin: 0;
+}
+
+#banner {
+  width: 100%;
+}
+
+#bannerImage {
+  width: 20%;
+  float: left;
+}
+
+#bannerImage img{
+  width: 75%;
+}
+
+#bannerText{
+  width: 80%;
+  float: right;
+}
+
+/* MISC */
+.clearfix:after {
+  clear: both;
+  content: '.';
+  display: block;
+  visibility: hidden;
+  height: 0;
+}
+
+.clearfix {display: inline-block;}
+* html .clearfix {height: 1%;}
+.clearfix {display: block;}
+
+/****************************
+  Front Page
+****************************/
+
+#btnStart, #btnSubmit {
   background: #00a606;
   background-image: -webkit-linear-gradient(top, #00a606, #7ede81);
   background-image: -moz-linear-gradient(top, #00a606, #7ede81);
@@ -22,13 +131,14 @@ a {
   -moz-box-shadow: 4px 5px 10px #666666;
   box-shadow: 4px 5px 10px #666666;
   color: #ffffff;
+  font-family: 'Exo', sans-serif;
   font-size: 40px;
   padding: 40px;
   border: solid #57ad25 4px;
   text-decoration: none;
 }
 
-#btnStart:active {
+#btnStart:active, #btnSubmit:active {
   background: #38750f;
   background-image: -webkit-linear-gradient(top, #38750f, #58b358);
   background-image: -moz-linear-gradient(top, #38750f, #58b358);
@@ -38,11 +148,141 @@ a {
   text-decoration: none;
 }
 
+/****************************
+  FORM STYLES
+****************************/
+#formAddInfophoto, #backgroundWrapper {
+  padding: 2.5%;
+  width: 95%;
+  background-color:rgba(60, 60, 60, 0.9);
+  transition: all .5s ease-in-out;
+  z-index: 1;
+  -webkit-box-shadow: 0px 0px 25px 0px #666;
+  -moz-box-shadow: 0px 0px 25px 0px #666;
+  box-shadow: 0px 0px 25px 0px #666;
+  border-radius: 15px;
+}
+
+.textinput {
+  width:75%;
+  display:block;
+  border: 1px solid #999;
+  height: 25px;
+  -webkit-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.7);
+  -moz-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.7);
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.7);
+}
+
+.addspace {
+  margin-bottom: 10px;
+}
+
+.red {
+  color: red;
+}
+
+input[type=checkbox] {
+  /* All browsers except webkit*/
+  transform: scale(2);
+  /* Webkit browsers*/
+  -webkit-transform: scale(2);
+}
+
+input[type=radio] {
+  /* All browsers except webkit*/
+  transform: scale(2);
+  /* Webkit browsers*/
+  -webkit-transform: scale(2);
+}
+
+.checkboxPadding{
+    margin:10px 10px 10px 8px;
+    padding:5px;
+}
+
+table {
+  width: 100%;
+}
+
+/****************************
+  LIST STYLES
+****************************/
+
+ul {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#list li {
+  width: 98%;
+  margin: 10px 0;
+  padding: 0.1% 1%;
+  background-color:rgba(60, 60, 60, 0.9);
+  transition: all .5s ease-in-out;
+  z-index: 1;
+  -webkit-box-shadow: 0px 0px 25px 0px #666;
+  -moz-box-shadow: 0px 0px 25px 0px #666;
+  box-shadow: 0px 0px 25px 0px #666;
+  border-radius: 5px;
+  display: inline-block;
+  list-style: none;
+}
+
+#itemLeft {
+  width: 70%;
+  float: left;
+}
+
+#itemRight {
+  width: 30%;
+  float: right;
+  text-align: right;
+  margin-top: 27px;
+}
+
+.btn {
+  background: #00a606;
+  background-image: -webkit-linear-gradient(top, #00a606, #7ede81);
+  background-image: -moz-linear-gradient(top, #00a606, #7ede81);
+  background-image: -ms-linear-gradient(top, #00a606, #7ede81);
+  background-image: -o-linear-gradient(top, #00a606, #7ede81);
+  background-image: linear-gradient(to bottom, #00a606, #7ede81);
+  -webkit-border-radius: 10;
+  -moz-border-radius: 10;
+  border-radius: 10px;
+  text-shadow: 2px 3px 3px #666666;
+  -webkit-box-shadow: 4px 5px 10px #666666;
+  -moz-box-shadow: 4px 5px 10px #666666;
+  box-shadow: 4px 5px 10px #666666;
+  color: #ffffff;
+  font-family: 'Exo', sans-serif;
+  font-size: 20px;
+  padding: 15px;
+  border: solid #57ad25 4px;
+  text-decoration: none;
+}
+
+.btn:active, .btn {
+  background: #38750f;
+  background-image: -webkit-linear-gradient(top, #38750f, #58b358);
+  background-image: -moz-linear-gradient(top, #38750f, #58b358);
+  background-image: -ms-linear-gradient(top, #38750f, #58b358);
+  background-image: -o-linear-gradient(top, #38750f, #58b358);
+  background-image: linear-gradient(to bottom, #38750f, #58b358);
+  text-decoration: none;
+}
+
+/****************************
+  TAKE PICTURE STYLES
+****************************/
+
 #camera {
-	width: 60%; 
+	width: 55%; 
 	height: 600px;
 	float: left;
-	margin: 0;
+	margin: 2.5% 2.5%;
 	padding: 0;
 	position: relative;
 }
@@ -56,18 +296,17 @@ a {
 }
 
 #takenpics {
-	width: 40%;
-	float: right;
+	width: 100%;
+	/*float: right;*/
 }
-
 #spot {
-	list-style: none;
-	width: 100%
+  width: 40%;
+  margin-top: 3%;
+  float: right;
 }
-
 #spot li{
-	width: 47%;
-	padding: 1%;
+	width: 45%;
+	padding: 1.5%;
 	list-style: none;
 	float: left;
 }
@@ -75,4 +314,38 @@ a {
 #photo1 img, #photo2 img, #photo3 img, #photo4 img {
 	width: 100%; 
 	height: 100%;
+}
+
+#thanks {
+  width: 100%;
+}
+
+.thanksImage {
+  width: 15%;
+  float: left;
+}
+
+.thanksImage img{
+  width: 100%;
+  vertical-align: text-top;
+}
+
+.thanksText {
+  width: 80%;
+  padding: 2.5%;
+  float: left;
+}
+
+/****************************
+  TAKE PICTURE STYLES
+****************************/
+
+#showpics li{
+  width: 49%;
+  padding: 0.5%;
+  display: inline-block;
+}
+
+#showpics li img{
+  width: 100%;
 }

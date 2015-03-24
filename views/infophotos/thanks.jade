@@ -1,16 +1,17 @@
 extends ../layout
 
-block content	
-	div#thanks
-		p You're in the queue! Head over to the Photobooth!
+block content
+	div#content-wrapper
+		h1.center You're in the queue! 
+		h1.center Head over to the Photobooth
 
-	script(type='text/javascript').
-		$( document ).ready(function() {
-			setTimeout(
-				function() 
-			{
-				var url = window.location.href;
-				var goToStart = url.replace(window.location.pathname, "");
-				window.location.href = goToStart;
-			}, 2500);
-		});
+		script(type='text/javascript').
+			$( document ).ready(function() {
+				setTimeout(
+					function() 
+				{
+					var url = window.location.href;
+					var goToStart = url.replace(window.location.pathname, "");
+					window.location.href = goToStart;
+				}, 2500);
+			});

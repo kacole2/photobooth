@@ -2,8 +2,6 @@ extends ../layout
 
 block content
 	script(src='/javascripts/webcam.min.js')
-	h1.
-		#{infophoto.uniqueurl}
 	div#camera
 		div#thecam
 	div#takenpics
@@ -16,10 +14,21 @@ block content
 				div#photo3
 			li
 				div#photo4
-	div#thanks
-		p Check out your photos at http://emccodebooth.cfapps.io/infophotos/#{infophoto.uniqueurl}
-		p An email has been sent to #{infophoto.email}
-		p Or check for a tweet from @EMCCodeBooth to #{infophoto.twitter}
+	div#content-wrapper
+		div#thanks
+			h1.center Check out your photos at 
+			h2.center http://emccodephotos.cfapps.io/infophotos/#{infophoto.uniqueurl}
+			br
+			br
+			div.thanksImage
+				img(src='../../images/email.png')
+			div.thanksText
+				h2 An email has been sent to #{infophoto.email}
+			div.thanksImage
+				img(src='../../images/twitter.png')
+			div.thanksText
+				h2 A tweet has been sent to #{infophoto.twitter}
+			
 
 	script(type='text/javascript').
 		$( document ).ready(function() {
@@ -31,7 +40,7 @@ block content
 				jpeg_quality: 90
 			});
 			Webcam.attach('thecam');
-			$("#photo1").append('<img id="countdown_gif" src="/images/countdown-black00.gif" />') 
+			$("#photo1").append('<img id="countdown_gif" src="/images/countdown0.gif" />') 
 			var photobooth_photos = [];
 			clear_gif();
 			setTimeout(
@@ -45,7 +54,7 @@ block content
 				Webcam.snap( function(data_uri) {
 					document.getElementById('photo1').innerHTML = '<img src="'+data_uri+'"/>';
 					post_photo(data_uri, 'photo1');
-					$("#photo2").append('<img id="countdown_gif" src="/images/countdown-black00.gif" />')
+					$("#photo2").append('<img id="countdown_gif" src="/images/countdown0.gif" />')
 					clear_gif();
 		
 					setTimeout(
@@ -63,7 +72,7 @@ block content
 				Webcam.snap( function(data_uri) {
 					document.getElementById('photo2').innerHTML = '<img src="'+data_uri+'"/>';
 					post_photo(data_uri, 'photo2');
-					$("#photo3").append('<img id="countdown_gif" src="/images/countdown-black00.gif" />')
+					$("#photo3").append('<img id="countdown_gif" src="/images/countdown0.gif" />')
 					clear_gif(); 
 					setTimeout(
 						function() 
@@ -79,7 +88,7 @@ block content
 				Webcam.snap( function(data_uri) {
 					document.getElementById('photo3').innerHTML = '<img src="'+data_uri+'"/>';
 					post_photo(data_uri, 'photo3')
-					$("#photo4").append('<img id="countdown_gif" src="/images/countdown-black00.gif" />')
+					$("#photo4").append('<img id="countdown_gif" src="/images/countdown0.gif" />')
 					clear_gif();
 					setTimeout(
 						function() 
@@ -114,7 +123,7 @@ block content
 						var url = window.location.href
 						var goToList = url.replace(window.location.pathname, "/infophotos/list")
 						window.location.href = goToList;
-					}, 5000);
+					}, 10000);
 
 				}, 5000);
 			}
