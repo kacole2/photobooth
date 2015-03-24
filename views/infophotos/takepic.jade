@@ -126,9 +126,13 @@ block content
 			}
 
 			function post_photo(photoData, number) {
-				jQuery.post("/infophotos/addpic/#{infophoto.uniqueurl}", {
-					"photo": photoData,
-					"number" : number
+				$.ajax({
+					method: "POST",
+					url: "/infophotos/addpic/#{infophoto.uniqueurl}",
+					data: { 
+						photo: photoData, 
+						number: number
+					}
 				});
 			}
 		});
