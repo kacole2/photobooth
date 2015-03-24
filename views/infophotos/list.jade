@@ -9,3 +9,12 @@ block content
 				p
 					= infophoto.fname
 					a(href='/infophotos/takepic/#{infophoto.uniqueurl}') Take Pics
+
+	script(type='text/javascript').
+		$( document ).ready(function() {
+			setTimeout(
+				function() 
+			{
+				location.reload(true);
+			}, 35000);
+		});
