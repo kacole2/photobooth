@@ -1,5 +1,12 @@
 extends layout
 
 block content
-	form#formStart(name="getStarted",method="get",action="/infophotos/new")
-		button#btnStart(type="submit") Click Here To Get Started!
+	div#content-wrapper
+		h1(style="font-size:3.7em;").center EMC {code} Photobooth
+		div.clearfix
+		br
+		br
+		form#formStart(name="getStarted",method="get",action="/infophotos/new").center
+			button#btnStart(type="submit") Touch Here To Get Started!
+
+		img(src='../../images/EMC-Code-Icon.png' style="width:50%;").center

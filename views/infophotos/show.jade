@@ -1,18 +1,49 @@
 extends ../layout
 
 block content
-    h1(class='center').
-        Infophoto #{infophoto.uniqueurl}
-    p First Name: #{infophoto.fname}
-    p Last Name: #{infophoto.lname}'
-    p Twitter Username: #{infophoto.twitter}
-    p Company: #{infophoto.company}
-    p Title: #{infophoto.title}
-    p Do you want to subscribe to the EMC {code} Newsletter? #{infophoto.newsletter}
-    p Which demo was your favorite? #{infophoto.favoritedemo}
-    p What technologies do you want to learn more about? #{infophoto.interests}
-    p photos
-        img(src="#{infophoto.photos[0]}")
-        img(src="#{infophoto.photos[1]}")
-        img(src="#{infophoto.photos[2]}")
-        img(src="#{infophoto.photos[3]}")
+    div#content-wrapper
+        div#banner
+            div#bannerImage
+                img(src='../../images/EMC-Code-Icon.png')
+            div#bannerText
+                h1.center.
+                    EMC {code} Photobooth @ EMC World
+                    May 3-8, 2015
+        div.clearfix
+        br
+        div#backgroundWrapper
+            ul#showpics
+                li
+                    a(href='#{infophoto.photos[0]}')
+                        img(src="#{infophoto.photos[0]}")
+                li
+                    a(href='#{infophoto.photos[1]}')
+                        img(src="#{infophoto.photos[1]}")
+                li
+                    a(href='#{infophoto.photos[2]}')
+                        img(src="#{infophoto.photos[2]}")
+                li
+                    a(href='#{infophoto.photos[3]}')
+                        img(src="#{infophoto.photos[3]}")
+            div.addspace
+            div#banner
+                div#bannerImage.center
+                    img(src='../../images/email.png')
+                div#bannerText
+                    if '#{infophoto.newsletter}' == true
+                        p.
+                            Thanks for being a subscriber to the EMC {code} Newsletter!
+                    else
+                        p.
+                            We noticed you didn't get a chance to subscribe to the EMC {code} newletter. Are you sure you don't want it?
+                        div.center
+                            a(href="http://visitor.r20.constantcontact.com/d.jsp?llr=qipf4rsab&amp;p=oi&amp;m=1119442091280&amp;sit=7hqmx8ijb&amp;f=928bf5a1-912d-4bcd-bcf4-422e2f9acb40" class="button" style="border:2px solid rgb(91,91,91);color:rgb(67,177,230);display:inline-block;padding:8px 10px;text-shadow:none;border-radius:5px;background-color:rgb(240,240,240);") EMC {code} Newsletter Sign-up
+            div.clearfix
+
+
+            p Twitter Username: #{infophoto.twitter}
+            p Company: #{infophoto.company}
+            p Title: #{infophoto.title}
+            p Do you want to subscribe to the EMC {code} Newsletter? #{infophoto.newsletter}
+            p Which demo was your favorite? #{infophoto.favoritedemo}
+            p What technologies do you want to learn more about? #{infophoto.interests}
