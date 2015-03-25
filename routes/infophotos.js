@@ -55,9 +55,6 @@ router.route('/')
 	    var interests = req.body.interests;
 	    var favoritedemo = req.body.favoritedemo;
 
-	    console.log('demo: ' + favoritedemo);
-	    console.log('interests: ' + interests);
-
 	    var uniqueurlIterator = 0;
 	    var uniqueurl = fname.toLowerCase() + lname.toLowerCase() + uniqueurlIterator.toString();
 	    //need to find in mongo by uniqueurl. if exists then add 1 to fname+lname
