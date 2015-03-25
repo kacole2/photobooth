@@ -5,13 +5,30 @@ var express = require('express'),
 	methodOverride = require('method-override'),
 	async = require('async'),
 	nconf = require('nconf'),
-	AWS = require('aws-sdk');
+	AWS = require('aws-sdk'),
+	nodemailer = require('nodemailer'),
+	smtpTransport = require('nodemailer-smtp-transport');
 
+//Pull in credentials from JSON file for everything
 nconf.file('creds.json');
 var S3accessKeyId = nconf.get('S3accessKeyId'),
     S3secretAccessKey = nconf.get('S3secretAccessKey'),
     S3endpoint = nconf.get('S3endpoint'),
-    S3url = nconf.get('S3url');
+    S3url = nconf.get('S3url'),
+    smtpHost = nconf.get('smtpHost'),
+    smtpUN = nconf.get('smtpUN'),
+    smtpPW = nconf.get('smtpPW');
+
+//build the transport layer for creating emails
+var transporter = nodemailer.createTransport(smtpTransport({
+    host: smtpHost,
+    ignoreTLS: true,
+    port: 25,
+    auth: {
+        user: smtpUN,
+        pass: smtpPW
+    }
+}));
 
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(methodOverride(function(req, res){
@@ -164,7 +181,7 @@ router.get('/takepic/:uniqueurl', function(req, res) {
 	});
 });
 
-/* GET Take Pictures */
+/* POST Add Picture to ECS/S3 */
 router.post('/addpic/:uniqueurl', function(req, res) {
 	buf = new Buffer(req.body.photo.replace(/^data:image\/\w+;base64,/, ""),'base64')
     var s3 = new AWS.S3({accessKeyId: S3accessKeyId, secretAccessKey: S3secretAccessKey});
@@ -199,6 +216,33 @@ router.post('/addpic/:uniqueurl', function(req, res) {
 	 	}
 	});
 
+});
+
+/* POST Send Email */
+router.post('/sendmail/:uniqueurl', function(req, res) {
+	var mailOptions = {
+	    from: 'EMC {code} <emccode@emc.com>', // sender address
+	    to: req.body.email, // list of receivers
+	    subject: 'Your EMC {code} Photobooth Photos!', // Subject line
+	    html: '<center><h1>EMC {code} Photobooth Photos @ EMC World</h1><h2>May 4-7, 2015 in Las Vegas</h2></center><p>go check out your photos at ' + req.params.uniqueurl + ' YEAHAHA.</p> <b>Hello world ✔</b>' // html body
+	};
+
+	// send mail with defined transport object
+	transporter.sendMail(mailOptions, function(error, info){
+	    if(error){
+	        console.log(error);
+	    }else{
+	    	console.log('Sending email to: ' + req.body.email + '\n Message sent: ' + info.response);
+	    }
+	});
+	res.format({
+		text: function(){
+			res.send('success');
+	 	},
+		json: function(){
+	   		res.json({message : 'email sent successfully'});
+	 	}
+	});
 });
 
 // route middleware to validate :uniqueurl
