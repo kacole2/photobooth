@@ -38,7 +38,6 @@ router.route('/')
 		  		var subscribers = 0;
 		  		async.each(infophotos, function(infophoto, done){
 		  			totalinfophotos +=1;
-		  			console.log(infophoto);
 		  			if(infophoto.newsletter == true){
 		  				subscribers += 1;
 		  			}
