@@ -1,27 +1,59 @@
 extends ../layout
 
+
 block content
+    link(rel='stylesheet', href='/stylesheets/tabletheme.dark.css')
+    script(type='text/javascript', src='javascripts/jquery.tablesorter.js')
     div#content-wrapper
-        h1(class='center').
-            All the infophotos
-        h4(class='center').
-            every photo!
-        ul
-            - each infophoto, i in infophotos
-                li
-                    p
-                        = infophoto.fname
-                    p
-                        = infophoto.lname
-                        = infophoto.twitter
-                        = infophoto.company
-                        = infophoto.title
-                        = infophoto.date
-                        = infophoto.interests
-                        = infophoto._id
-                        form(action='/infophotos/#{infophoto.uniqueurl}/edit',method='post',enctype='application/x-www-form-urlencoded')
-                            input(type='hidden',value='DELETE',name='_method')
-                            button(type='submit').
-                                Delete
-                        a(href='/infophotos/#{infophoto.uniqueurl}/edit') Edit
-                        a(href='/infophotos/#{infophoto.uniqueurl}') Show
+        h1.center Admin Dashboard
+        h4.center every photo! muhahah
+        ul#admindb
+            li
+                h3 Total Registered:
+                h4.center #{totalinfophotos}
+            li 
+                h3 Total Pictures Taken:
+                h4.center #{totalpictures}
+            li 
+                h3 Total New Subscribers:
+                h4.center #{subscribers}
+
+
+        table#sortme.tablesorter
+            thead
+                tr
+                    th First Name
+                    th Last Name
+                    th Company
+                    th Title
+                    th Twitter Handle
+                    th Photo Taken
+                    th Show
+                    th Edit
+                    th Delete
+            tbody
+                each infophoto, i in infophotos
+                    tr
+                        td #{infophoto.fname}
+                        td #{infophoto.lname}
+                        td #{infophoto.company}
+                        td #{infophoto.title}
+                        td #{infophoto.twitter}
+                        if infophoto.photos.length > 0
+                            td YES
+                        else
+                            td NO
+                        td 
+                            a(href='/infophotos/#{infophoto.uniqueurl}').btnshow Show
+                        td
+                            a(href='/infophotos/#{infophoto.uniqueurl}/edit').btnedit Edit
+                        td
+                            form(action='/infophotos/#{infophoto.uniqueurl}/edit',method='post',enctype='application/x-www-form-urlencoded')
+                                    input(type='hidden',value='DELETE',name='_method')
+                                    button(type='submit' class='btndelete').
+                                        Delete
+        script(type='text/javascript').
+            $(function(){
+                $("#sortme").tablesorter();
+            });
+              

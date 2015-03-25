@@ -33,17 +33,42 @@ router.route('/')
 		  	if (err) {
 		  		return console.error(err);
 		  	} else {
-		  		res.format({
-					html: function(){
-				    	res.render('infophotos/index', {
-				  			title: "Everyone's Info",
-				  			"infophotos" : infophotos
-			  			});
-					},
-					json: function(){
-				    	res.json(infophotos);
-					}
-				});
+		  		var totalinfophotos = 0;
+		  		var totalpictures = 0;
+		  		var subscribers = 0;
+		  		async.each(infophotos, function(infophoto, done){
+		  			totalinfophotos +=1;
+		  			console.log(infophoto);
+		  			if(infophoto.newsletter == true){
+		  				subscribers += 1;
+		  			}
+		  			if(infophoto.photos.length > 0){
+		  				totalpictures += 4;
+		  			}
+		  			done();
+		  		}, function(err){
+				    // if any of the file processing produced an error, err would equal that error
+				    if( err ) {
+				      // One of the iterations produced an error.
+				      // All processing will now stop.
+				      console.log('A file failed to process');
+				    } else {
+					    res.format({
+							html: function(){
+						    	res.render('infophotos/index', {
+						  			title: "Everyone's Info",
+						  			"infophotos" : infophotos,
+						  			"totalinfophotos" : totalinfophotos,
+						  			"totalpictures" : totalpictures,
+						  			"subscribers" : subscribers
+					  			});
+							},
+							json: function(){
+						    	res.json(infophotos);
+							}
+						});
+				    }
+		  		});
 		  	} 	
 		});
 	})
