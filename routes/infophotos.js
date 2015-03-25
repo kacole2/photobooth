@@ -55,8 +55,8 @@ router.route('/')
 	    var interests = req.body.interests;
 	    var favoritedemo = req.body.favoritedemo;
 
-	    console.log(favoritedemo);
-	    console.log(interests);
+	    console.log('demo: ' + favoritedemo);
+	    console.log('interests: ' + interests);
 
 	    var uniqueurlIterator = 0;
 	    var uniqueurl = fname.toLowerCase() + lname.toLowerCase() + uniqueurlIterator.toString();
