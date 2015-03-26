@@ -9,14 +9,14 @@ block content
         h4.center every photo! muhahah
         ul#admindb
             li
-                h3 Total Registered:
-                h4.center #{totalinfophotos}
+                h3 Registered:
+                h3.center #{totalinfophotos}
             li 
-                h3 Total Pictures Taken:
-                h4.center #{totalpictures}
+                h3 Pictures Taken:
+                h3.center #{totalpictures}
             li 
-                h3 Total New Subscribers:
-                h4.center #{subscribers}
+                h3 Subscribers:
+                h3.center #{subscribers}
 
 
         table#sortme.tablesorter
@@ -28,6 +28,7 @@ block content
                     th Title
                     th Twitter Handle
                     th Photo Taken
+                    th Subscribed
                     th Show
                     th Edit
                     th Delete
@@ -40,6 +41,10 @@ block content
                         td #{infophoto.title}
                         td #{infophoto.twitter}
                         if infophoto.photos.length > 0
+                            td YES
+                        else
+                            td NO
+                        if infophoto.newsletter == true
                             td YES
                         else
                             td NO
