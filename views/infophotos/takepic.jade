@@ -34,10 +34,11 @@ block content
 				img(src='../../images/email.png')
 			div.thanksText
 				h2 An email has been sent to #{infophoto.email}
-			div.thanksImage
-				img(src='../../images/twitter.png')
-			div.thanksText
-				h2 A tweet has been sent to #{infophoto.twitter}
+			if infophoto.twitter != ''
+				div.thanksImage
+					img(src='../../images/twitter.png')
+				div.thanksText
+					h2 A tweet has been sent to #{infophoto.twitter}
 			
 
 	script(type='text/javascript').
@@ -142,6 +143,9 @@ block content
 					$("#photo4").show();
 				});
 				send_email();
+				if('#{infophoto.twitter}' != ''){
+					console.log('twitter goes here');
+				}
 				clear_it();
 			}
 
