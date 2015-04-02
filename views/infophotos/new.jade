@@ -1,6 +1,7 @@
 extends ../layout
 
 block content
+	script(type='text/javascript', src='javascripts/jquery.validate.js')
 	div#content-wrapper
 		div#banner.center
 			div#bannerImage
@@ -12,26 +13,26 @@ block content
 			div.addspace
 				label(for='fname', class='label') First Name: 
 					span.red *
-					input(type='text',id='fname',name='fname',placeholder='ex. EMC',class='textinput')
+					input(type='text',id='fname',name='fname',placeholder='ex. EMC',class='textinput', autocomplete="off", required)
 			div.addspace
 				label(for='lname', class='label') Last Name:
 					span.red *
-					input(type='text',id='lname',name='lname',placeholder='ex. {code}',class='textinput')
+					input(type='text',id='lname',name='lname',placeholder='ex. {code}',class='textinput', autocomplete="off", required)
 			div.addspace
 				label(for='email', class='label') Email:
 					span.red *
-					input(type='text',id='email',name='email',placeholder='ex. emccode@emc.com',class='textinput')
+					input(type='email',id='email',name='email',placeholder='ex. emccode@emc.com',class='textinput', autocomplete="off", required)
 			div.addspace
 				label(for='twitter', class='label') Twitter Username:
-					input(type='text',id='twitter',name='twitter',placeholder='ex. @EMCCode',class='textinput')
+					input(type='text',id='twitter',name='twitter',placeholder='ex. @EMCCode',class='textinput', autocomplete="off")
 			div.addspace
 				label(for='company', class='label') Company:
 					span.red * 
-					input(type='text',id='company',name='company',placeholder='ex. EMC',class='textinput')
+					input(type='text',id='company',name='company',placeholder='ex. EMC',class='textinput', autocomplete="off", required)
 			div.addspace
 				label(for='title', class='label') Title:
 					span.red * 
-					input(type='text',id='title',name='title',placeholder='ex. CEO',class='textinput')
+					input(type='text',id='title',name='title',placeholder='ex. CEO',class='textinput', autocomplete="off", required)
 			br
 			br
 			div.addspace
@@ -105,3 +106,8 @@ block content
 							label(for='Da Partiez!', class='label') Da Partiez!
 				br
 			button#btnSubmit(type="submit").center Put Me In The Queue!
+
+	script(type='text/javascript').
+		$( document ).ready(function() {
+			$("#formAddInfophoto").validate();
+		}
