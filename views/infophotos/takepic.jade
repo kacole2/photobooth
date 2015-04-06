@@ -15,6 +15,16 @@ block content
 			li
 				div#photo4
 	div#content-wrapper
+		div#start
+			h1.center Get Ready!
+			h1.center Photos will begin in 10 seconds!
+			br
+			br
+			h2.underline.center If you aren't 
+				b #{infophoto.fname} #{infophoto.lname},  
+				| go back!
+			a(href='javascript:history.back()')
+				img(src='../../images/green_arrow.png' style='width:50%;').center
 		div#thanks
 			h1.center Check out your photos at 
 			h2.center http://emccodephotos.cfapps.io/infophotos/#{infophoto.uniqueurl}
@@ -24,33 +34,57 @@ block content
 				img(src='../../images/email.png')
 			div.thanksText
 				h2 An email has been sent to #{infophoto.email}
-			div.thanksImage
-				img(src='../../images/twitter.png')
-			div.thanksText
-				h2 A tweet has been sent to #{infophoto.twitter}
+			if infophoto.twitter != ''
+				div.thanksImage
+					img(src='../../images/twitter.png')
+				div.thanksText
+					h2 A tweet has been sent to #{infophoto.twitter}
 			
 
 	script(type='text/javascript').
 		$( document ).ready(function() {
 			$("#thanks").hide();
-			Webcam.set({
-				dest_width: 640,
-				dest_height: 480,
-				image_format: 'png',
-				jpeg_quality: 90
-			});
-			Webcam.attach('thecam');
-			$("#photo1").append('<img id="countdown_gif" src="/images/countdown0.gif" />') 
-			var photobooth_photos = [];
-			clear_gif();
+			$("#camera").hide();
+			$("#takenpics").hide();
+
+			// preload shutter audio clip
+			var shutter = new Audio();
+			shutter.autoplay = false;
+			shutter.src = navigator.userAgent.match(/Firefox/) ? '/images/shutter.ogg' : '/images/shutter.mp3';
+
 			setTimeout(
 				function() 
 			{
-				take_snapshot1();
-			}, 5000);
+				$("#start").hide();
+				display_cam();
+			}, 10000);
+	
+
+			function display_cam() {
+				$("#camera").show();
+				$("#takenpics").show();
+
+				Webcam.set({
+					dest_width: 640,
+					dest_height: 480,
+					image_format: 'jpeg',
+					jpeg_quality: 90
+				});
+
+				Webcam.attach('thecam');
+				$("#photo1").append('<img id="countdown_gif" src="/images/countdown0.gif" />') 
+				clear_gif();
+				setTimeout(
+					function() 
+				{
+					take_snapshot1();
+				}, 5000);
+			}
 
 			function take_snapshot1() {
 				$("#photo1 img").remove();
+				// play sound effect
+				shutter.play();
 				Webcam.snap( function(data_uri) {
 					document.getElementById('photo1').innerHTML = '<img src="'+data_uri+'"/>';
 					post_photo(data_uri, 'photo1');
@@ -69,6 +103,7 @@ block content
 
 			function take_snapshot2() {
 				$("#photo2 img").remove();
+				shutter.play();
 				Webcam.snap( function(data_uri) {
 					document.getElementById('photo2').innerHTML = '<img src="'+data_uri+'"/>';
 					post_photo(data_uri, 'photo2');
@@ -85,6 +120,7 @@ block content
 
 			function take_snapshot3() {
 				$("#photo3 img").remove();
+				shutter.play();
 				Webcam.snap( function(data_uri) {
 					document.getElementById('photo3').innerHTML = '<img src="'+data_uri+'"/>';
 					post_photo(data_uri, 'photo3')
@@ -100,12 +136,16 @@ block content
 
 			function take_snapshot4() {
 				$("#photo4 img").remove();
+				shutter.play();
 				Webcam.snap( function(data_uri) {
 					document.getElementById('photo4').innerHTML = '<img src="'+data_uri+'"/>';
 					post_photo(data_uri, 'photo4')
 					$("#photo4").show();
 				});
 				send_email();
+				if('#{infophoto.twitter}' != ''){
+					console.log('twitter goes here');
+				}
 				clear_it();
 			}
 

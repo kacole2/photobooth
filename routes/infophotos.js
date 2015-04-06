@@ -30,6 +30,10 @@ var transporter = nodemailer.createTransport(smtpTransport({
     }
 }));
 
+String.prototype.capitalizeFirstLetter = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(methodOverride(function(req, res){
   	if (req.body && typeof req.body === 'object' && '_method' in req.body) {
@@ -42,21 +46,45 @@ router.use(methodOverride(function(req, res){
 
 router.route('/')
 	.get(function(req, res, next) {
-		mongoose.model('Infophoto').find({}, function (err, infophotos) {
+		mongoose.model('Infophoto').find({}, null, {sort: {lname: 1}}, function (err, infophotos) {
 		  	if (err) {
 		  		return console.error(err);
 		  	} else {
-		  		res.format({
-					html: function(){
-				    	res.render('infophotos/index', {
-				  			title: "Everyone's Info",
-				  			"infophotos" : infophotos
-			  			});
-					},
-					json: function(){
-				    	res.json(infophotos);
-					}
-				});
+		  		var totalinfophotos = 0;
+		  		var totalpictures = 0;
+		  		var subscribers = 0;
+		  		async.each(infophotos, function(infophoto, done){
+		  			totalinfophotos +=1;
+		  			if(infophoto.newsletter == true){
+		  				subscribers += 1;
+		  			}
+		  			if(infophoto.photos.length > 0){
+		  				totalpictures += 4;
+		  			}
+		  			done();
+		  		}, function(err){
+				    // if any of the file processing produced an error, err would equal that error
+				    if( err ) {
+				      // One of the iterations produced an error.
+				      // All processing will now stop.
+				      console.log('A file failed to process');
+				    } else {
+					    res.format({
+							html: function(){
+						    	res.render('infophotos/index', {
+						  			title: "Everyone's Info",
+						  			"infophotos" : infophotos,
+						  			"totalinfophotos" : totalinfophotos,
+						  			"totalpictures" : totalpictures,
+						  			"subscribers" : subscribers
+					  			});
+							},
+							json: function(){
+						    	res.json(infophotos);
+							}
+						});
+				    }
+		  		});
 		  	} 	
 		});
 	})
@@ -72,9 +100,6 @@ router.route('/')
 	    var interests = req.body.interests;
 	    var favoritedemo = req.body.favoritedemo;
 
-	    console.log(favoritedemo);
-	    console.log(interests);
-
 	    var uniqueurlIterator = 0;
 	    var uniqueurl = fname.toLowerCase() + lname.toLowerCase() + uniqueurlIterator.toString();
 	    //need to find in mongo by uniqueurl. if exists then add 1 to fname+lname
@@ -84,6 +109,8 @@ router.route('/')
 	    	function (){ return goodurl == true }, 
 	    	function(done){
 	    		uniqueurl = fname.toLowerCase() + lname.toLowerCase() + uniqueurlIterator.toString();
+	    		fname = fname.capitalizeFirstLetter();
+	    		lname = lname.capitalizeFirstLetter();
 	    		console.log('Trying: ' + uniqueurl);
 	    		mongoose.model('Infophoto').findOne({ uniqueurl: uniqueurl}, function (err, infophoto) {
 		    		if (err) {
@@ -142,7 +169,7 @@ router.get('/new', function(req, res) {
 
 /* GET List of Pictures to be taken */
 router.get('/list', function(req, res) {
-    mongoose.model('Infophoto').find({photos : []}, function (err, infophotos) {
+    mongoose.model('Infophoto').find({photos : []}, null, {sort: {lname: 1}}, function (err, infophotos) {
 		if (err) {
 			console.log('GET Error: There was a problem retrieving: ' + err);
 		} else {

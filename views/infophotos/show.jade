@@ -30,7 +30,7 @@ block content
                 div#bannerImage.center
                     img(src='../../images/email.png')
                 div#bannerText
-                    if '#{infophoto.newsletter}' == true
+                    if infophoto.newsletter == true
                         p.
                             Thanks for being a subscriber to the EMC {code} Newsletter!
                     else
