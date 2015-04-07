@@ -278,6 +278,24 @@ ul {
   text-decoration: none;
 }
 
+#refresh {
+  width: 150px;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  text-align: center;
+}
+
+#refresh h2 {
+  margin: 0;
+  padding: 0;
+}
+
+
+#refresh img{
+  width: 100%;
+}
+
 /****************************
   TAKE PICTURE STYLES
 ****************************/

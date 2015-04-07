@@ -16,12 +16,19 @@ block content
 							#{infophoto.fname} #{infophoto.lname}
 					div#itemRight
 						a(href='/infophotos/takepic/#{infophoto.uniqueurl}' class='btn') Take Photobooth Photos!
+	div#refresh
+		h2 REFRESH
+		img(src='../../images/refresh.png')
+		h2 NAMES
 
 		script(type='text/javascript').
-			/*$( document ).ready(function() {
+			$( document ).ready(function() {
 				setTimeout(
 					function() 
 				{
 					location.reload(true);
 				}, 35000);
-			});*/
+				$('#refresh').click(function(){
+					location.reload(true);
+				});
+			});
