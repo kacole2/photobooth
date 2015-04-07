@@ -260,7 +260,7 @@ router.post('/sendmail/:uniqueurl', function(req, res) {
 	    from: 'EMC Code Photobooth <emccode.photobooth@emc.com>', // sender address
 	    to: req.body.email, // list of receivers
 	    subject: 'Your EMC {code} Photobooth Photos!', // Subject line
-	    html: '<!DOCTYPE html><html><body style="width: 100%;"><div style="width: 90%;margin: 1% 5%;"><center><a href="http://emccode.github.io/"><img src="http://emccode.github.io/images/badge.png" style="width:100px;"></a><h1>EMC {code} Photobooth Photos</h1><h2>EMC World Las Vegas</h2><h2>May 4-7, 2015</h2></center><p>Thanks for checking out <a href="http://emccode.github.io/">EMC {code}</a> while you were at EMC World! EMC is committed to the open source movement. EMC is constantly releasing new open source bits and it all lives on the <a href="http://emccode.github.io/">EMC {code} Github</a> page. Also be sure to check out the <a href="http://blog.emccode.com/">EMC {code} Blog</a> frequently for information on some of our latest projects.</p><p>Want to relive those Photobooth photos? Go check out your photos at <a href="http://emccodephotobooth.cfapps.io/infophotos/' + req.params.uniqueurl + '">' + req.params.uniqueurl + '</a></p></div></body></html>'
+	    html: '<!DOCTYPE html><html><body style="width: 100%;"><div style="width: 90%;margin: 1% 5%;"><center><a href="http://emccode.github.io/"><img src="http://emccode.github.io/images/badge.png" style="width:100px;"></a><h1>EMC {code} Photobooth Photos</h1><h2>EMC World Las Vegas</h2><h2>May 4-7, 2015</h2></center><p>Thanks for checking out <a href="http://emccode.github.io/">EMC {code}</a> while you were at EMC World! EMC is committed to the open source movement. EMC is constantly releasing new open source bits and it all lives on the <a href="http://emccode.github.io/">EMC {code} Github</a> page. Also be sure to check out the <a href="http://blog.emccode.com/">EMC {code} Blog</a> frequently for information on some of our latest projects.</p><p>Want to relive those Photobooth moments? Go check out your photos at <a href="http://emccodephotos.cfapps.io/infophotos/' + req.params.uniqueurl + '">' + req.params.uniqueurl + '</a></p><ul style="list-style: none;width: 100%;margin: 0;padding: 0;"><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/photo1.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/photo2.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/photo3.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/photo4.jpeg" style="width: 100%;"></li></ul></div></body></html>'
 	};
 
 	// send mail with defined transport object
@@ -268,7 +268,7 @@ router.post('/sendmail/:uniqueurl', function(req, res) {
 	    if(error){
 	        console.log(error);
 	    }else{
-	    	console.log('Sending email to: ' + req.body.email + '\n Message sent: ' + info.response);
+	    	console.log('Sending email to: ' + req.body.email);
 	    }
 	});
 	res.format({
