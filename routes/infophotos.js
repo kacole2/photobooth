@@ -7,7 +7,7 @@ var express = require('express'),
 	nconf = require('nconf'),
 	AWS = require('aws-sdk'),
 	nodemailer = require('nodemailer'),
-	smtpTransport = require('nodemailer-smtp-transport');
+	sesTransport = require('nodemailer-ses-transport');
 
 //Pull in credentials from JSON file for everything
 nconf.file('creds.json');
@@ -16,18 +16,13 @@ var S3accessKeyId = nconf.get('S3accessKeyId'),
     S3endpoint = nconf.get('S3endpoint'),
     S3url = nconf.get('S3url'),
     smtpHost = nconf.get('smtpHost'),
-    smtpUN = nconf.get('smtpUN'),
-    smtpPW = nconf.get('smtpPW');
+    SESaccessKeyId = nconf.get('SESaccessKeyId'),
+    SESsecretAccessKey = nconf.get('SESsecretAccessKey');
 
 //build the transport layer for creating emails
-var transporter = nodemailer.createTransport(smtpTransport({
-    host: smtpHost,
-    ignoreTLS: true,
-    port: 25,
-    auth: {
-        user: smtpUN,
-        pass: smtpPW
-    }
+var transporter = nodemailer.createTransport(sesTransport({
+    accessKeyId: SESaccessKeyId,
+    secretAccessKey: SESsecretAccessKey
 }));
 
 String.prototype.capitalizeFirstLetter = function() {
@@ -248,10 +243,10 @@ router.post('/addpic/:uniqueurl', function(req, res) {
 /* POST Send Email */
 router.post('/sendmail/:uniqueurl', function(req, res) {
 	var mailOptions = {
-	    from: 'EMC {code} <emccode@emc.com>', // sender address
+	    from: 'EMC Code Photobooth <emccode.photobooth@emc.com>', // sender address
 	    to: req.body.email, // list of receivers
 	    subject: 'Your EMC {code} Photobooth Photos!', // Subject line
-	    html: '<center><h1>EMC {code} Photobooth Photos @ EMC World</h1><h2>May 4-7, 2015 in Las Vegas</h2></center><p>go check out your photos at ' + req.params.uniqueurl + ' YEAHAHA.</p> <b>Hello world ✔</b>' // html body
+	    html: '<!DOCTYPE html><html><body style="width: 100%;"><div style="width: 90%;margin: 1% 5%;"><center><a href="http://emccode.github.io/"><img src="http://emccode.github.io/images/badge.png" style="width:100px;"></a><h1>EMC {code} Photobooth Photos</h1><h2>EMC World Las Vegas</h2><h2>May 4-7, 2015</h2></center><p>Thanks for checking out <a href="http://emccode.github.io/">EMC {code}</a> while you were at EMC World! EMC is committed to the open source movement. EMC is constantly releasing new open source bits and it all lives on the <a href="http://emccode.github.io/">EMC {code} Github</a> page. Also be sure to check out the <a href="http://blog.emccode.com/">EMC {code} Blog</a> frequently for information on some of our latest projects.</p><p>Want to relive those Photobooth photos? Go check out your photos at <a href="http://emccodephotobooth.cfapps.io/infophotos/' + req.params.uniqueurl + '">' + req.params.uniqueurl + '</a></p></div></body></html>'
 	};
 
 	// send mail with defined transport object
