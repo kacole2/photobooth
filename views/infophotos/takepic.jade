@@ -144,7 +144,7 @@ block content
 				});
 				send_email();
 				if('#{infophoto.twitter}' != ''){
-					console.log('twitter goes here');
+					send_tweet();
 				}
 				clear_it();
 			}
@@ -192,6 +192,16 @@ block content
 					url: "/infophotos/sendmail/#{infophoto.uniqueurl}",
 					data: { 
 						email: '#{infophoto.email}'
+					}
+				});
+			}
+
+			function send_tweet() {
+				$.ajax({
+					method: "POST",
+					url: "/infophotos/sendtweet/#{infophoto.uniqueurl}",
+					data: { 
+						twitid: '#{infophoto.twitter}',
 					}
 				});
 			}

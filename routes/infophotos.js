@@ -5,13 +5,39 @@ var express = require('express'),
 	methodOverride = require('method-override'),
 	async = require('async'),
 	nconf = require('nconf'),
-	AWS = require('aws-sdk');
+	AWS = require('aws-sdk'),
+	nodemailer = require('nodemailer'),
+	sesTransport = require('nodemailer-ses-transport'),
+	request = require('request').defaults({ encoding: null }),
+	twitter = require('twitter');
 
+//Pull in credentials from JSON file for everything
 nconf.file('creds.json');
 var S3accessKeyId = nconf.get('S3accessKeyId'),
     S3secretAccessKey = nconf.get('S3secretAccessKey'),
     S3endpoint = nconf.get('S3endpoint'),
-    S3url = nconf.get('S3url');
+    S3url = nconf.get('S3url'),
+    smtpHost = nconf.get('smtpHost'),
+    SESaccessKeyId = nconf.get('SESaccessKeyId'),
+    SESsecretAccessKey = nconf.get('SESsecretAccessKey'),
+    Twitter_consumer_key = nconf.get('Twitter_consumer_key'),
+    Twitter_consumer_secret = nconf.get('Twitter_consumer_secret'),
+    Twitter_access_token = nconf.get('Twitter_access_token'),
+    Twitter_access_token_secret = nconf.get('Twitter_access_token_secret');
+
+//build the transport layer for creating emails
+var transporter = nodemailer.createTransport(sesTransport({
+    accessKeyId: SESaccessKeyId,
+    secretAccessKey: SESsecretAccessKey
+}));
+
+//build twitter access and key tokens using Twit
+var twitterClient = new twitter({
+    consumer_key:  Twitter_consumer_key,
+    consumer_secret:  Twitter_consumer_secret,
+    access_token_key:  Twitter_access_token,
+    access_token_secret: Twitter_access_token_secret 
+})
 
 String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
@@ -191,16 +217,16 @@ router.get('/takepic/:uniqueurl', function(req, res) {
 	});
 });
 
-/* GET Take Pictures */
+/* POST Add Picture to ECS/S3 */
 router.post('/addpic/:uniqueurl', function(req, res) {
 	buf = new Buffer(req.body.photo.replace(/^data:image\/\w+;base64,/, ""),'base64')
     var s3 = new AWS.S3({accessKeyId: S3accessKeyId, secretAccessKey: S3secretAccessKey});
     var params = {
 		Bucket: 'emcphotobooth', /* required */
-		Key: req.params.uniqueurl + '/' + req.body.number + '.png', /* required */
+		Key: req.params.uniqueurl + '/' + req.body.number + '.jpeg', /* required */
 		ACL: 'public-read',
 		Body: buf,
-		ContentType:  'image/png',
+		ContentType:  'image/jpeg',
 		ContentEncoding: 'base64'
 	};
 	s3.putObject(params, function(err, data) {
@@ -209,7 +235,7 @@ router.post('/addpic/:uniqueurl', function(req, res) {
 	});
 
 	mongoose.model('Infophoto').findOneAndUpdate({uniqueurl : req.params.uniqueurl},
-			{$push: {'photos': 'https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/' + req.body.number + '.png'}},
+			{$push: {'photos': 'https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/' + req.body.number + '.jpeg'}},
 		    {safe: true, upsert: true},
 		    function(err, model) {
 		        //console.log(err);
@@ -226,6 +252,74 @@ router.post('/addpic/:uniqueurl', function(req, res) {
 	 	}
 	});
 
+});
+
+/* POST Send Email */
+router.post('/sendmail/:uniqueurl', function(req, res) {
+	var mailOptions = {
+	    from: 'EMC Code Photobooth <emccode.photobooth@emc.com>', // sender address
+	    to: req.body.email, // list of receivers
+	    subject: 'Your EMC {code} Photobooth Photos!', // Subject line
+	    html: '<!DOCTYPE html><html><body style="width: 100%;"><div style="width: 90%;margin: 1% 5%;"><center><a href="http://emccode.github.io/"><img src="http://emccode.github.io/images/badge.png" style="width:100px;"></a><h1>EMC {code} Photobooth Photos</h1><h2>EMC World Las Vegas</h2><h2>May 4-7, 2015</h2></center><p>Thanks for checking out <a href="http://emccode.github.io/">EMC {code}</a> while you were at EMC World! EMC is committed to the open source movement. EMC is constantly releasing new open source bits and it all lives on the <a href="http://emccode.github.io/">EMC {code} Github</a> page. Also be sure to check out the <a href="http://blog.emccode.com/">EMC {code} Blog</a> frequently for information on some of our latest projects.</p><p>Want to relive those Photobooth moments? Go check out your photos at <a href="http://emccodephotos.cfapps.io/infophotos/' + req.params.uniqueurl + '">' + req.params.uniqueurl + '</a></p><ul style="list-style: none;width: 100%;margin: 0;padding: 0;"><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/photo1.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/photo2.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/photo3.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/photo4.jpeg" style="width: 100%;"></li></ul></div></body></html>'
+	};
+
+	// send mail with defined transport object
+	transporter.sendMail(mailOptions, function(error, info){
+	    if(error){
+	        console.log(error);
+	    }else{
+	    	console.log('Sending email to: ' + req.body.email);
+	    }
+	});
+	res.format({
+		text: function(){
+			res.send('success');
+	 	},
+		json: function(){
+	   		res.json({message : 'email sent successfully'});
+	 	}
+	});
+});
+
+/* POST Send Tweet */
+router.post('/sendtweet/:uniqueurl', function(req, res) {
+	var twitid = req.body.twitid.toString();
+	if(twitid.charAt(0) != '@'){
+		twitid = '@' + twitid;
+	}
+
+	//get the image from S3/ECS that will post a photo to twitter as well
+	request.get('https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/photo2.jpeg', function (error, response, photoboothPic) {
+	    if (!error && response.statusCode == 200) {
+	        //post the image to twitter
+			twitterClient.post('media/upload', { media: photoboothPic }, function (err, media, response) {
+			  // now we can reference the media and post a tweet (media will attach to the tweet)
+			  if(err){
+			  		console.log(err);
+			  } else {
+					var status = { 
+						status: twitid + ' Go check out your EMC World Photobooth Photos at http://emccodephotobooth.cfapps.io/infophotos/' + req.params.uniqueurl,
+						media_ids: media.media_id_string
+					}
+
+					twitterClient.post('statuses/update', status, function (err, tweet, response) {
+						if (!error) {
+					        console.log('Sending tweet to: ' + twitid);
+					    }
+					})
+			  }
+			})
+	    }
+	});
+
+	res.format({
+		text: function(){
+			res.send('success');
+	 	},
+		json: function(){
+	   		res.json({message : 'tweet sent successfully'});
+	 	}
+	});
 });
 
 // route middleware to validate :uniqueurl
