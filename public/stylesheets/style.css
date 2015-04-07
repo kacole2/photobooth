@@ -378,7 +378,7 @@ ul {
     border-collapse: collapse;
 }
 #sortme th, #sortme td {
-    padding: 5px;
+    padding: 8px;
 }
 
 .btnshow, .btnedit, .btndelete {

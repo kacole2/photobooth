@@ -2,11 +2,10 @@ extends ../layout
 
 
 block content
-    link(rel='stylesheet', href='/stylesheets/tabletheme.dark.css')
-    script(type='text/javascript', src='javascripts/jquery.tablesorter.js')
+    script(type='text/javascript', src='/javascripts/jquery.tablesorter.js')
     div#content-wrapper
         h1.center Admin Dashboard
-        h4.center every photo! muhahah
+        h4.center.egg2 every photo! muhahah
         ul#admindb
             li
                 h3 Registered:
@@ -30,8 +29,8 @@ block content
                     th Photo Taken
                     th Subscribed
                     th Show
-                    th Edit
-                    th Delete
+                    th.egg Edit
+                    th.egg Delete
             tbody
                 each infophoto, i in infophotos
                     tr
@@ -50,17 +49,24 @@ block content
                             td NO
                         td 
                             a(href='/infophotos/#{infophoto.uniqueurl}').btnshow Show
-                        td
+                        td.egg
                             a(href='/infophotos/#{infophoto.uniqueurl}/edit').btnedit Edit
-                        td
+                        td.egg
                             form(action='/infophotos/#{infophoto.uniqueurl}/edit',method='post',enctype='application/x-www-form-urlencoded')
                                     input(type='hidden',value='DELETE',name='_method')
                                     button(type='submit' class='btndelete').
                                         Delete
-        script(type='text/javascript').
-            $(function(){
-                $("#sortme").tablesorter();
+    
+
+    script(type='text/javascript').
+        $( document ).ready(function() {
+            $('.egg').hide();
+            $("#sortme").tablesorter();
+            $('.egg2').click(function() {
+                $('.egg').show();
             });
+        });
+            
 
             
               
