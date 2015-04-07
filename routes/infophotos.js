@@ -7,7 +7,9 @@ var express = require('express'),
 	nconf = require('nconf'),
 	AWS = require('aws-sdk'),
 	nodemailer = require('nodemailer'),
-	sesTransport = require('nodemailer-ses-transport');
+	sesTransport = require('nodemailer-ses-transport'),
+	request = require('request').defaults({ encoding: null }),
+	twitter = require('twitter');
 
 //Pull in credentials from JSON file for everything
 nconf.file('creds.json');
@@ -17,13 +19,25 @@ var S3accessKeyId = nconf.get('S3accessKeyId'),
     S3url = nconf.get('S3url'),
     smtpHost = nconf.get('smtpHost'),
     SESaccessKeyId = nconf.get('SESaccessKeyId'),
-    SESsecretAccessKey = nconf.get('SESsecretAccessKey');
+    SESsecretAccessKey = nconf.get('SESsecretAccessKey'),
+    Twitter_consumer_key = nconf.get('Twitter_consumer_key'),
+    Twitter_consumer_secret = nconf.get('Twitter_consumer_secret'),
+    Twitter_access_token = nconf.get('Twitter_access_token'),
+    Twitter_access_token_secret = nconf.get('Twitter_access_token_secret');
 
 //build the transport layer for creating emails
 var transporter = nodemailer.createTransport(sesTransport({
     accessKeyId: SESaccessKeyId,
     secretAccessKey: SESsecretAccessKey
 }));
+
+//build twitter access and key tokens using Twit
+var twitterClient = new twitter({
+    consumer_key:  Twitter_consumer_key,
+    consumer_secret:  Twitter_consumer_secret,
+    access_token_key:  Twitter_access_token,
+    access_token_secret: Twitter_access_token_secret 
+})
 
 String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
@@ -209,10 +223,10 @@ router.post('/addpic/:uniqueurl', function(req, res) {
     var s3 = new AWS.S3({accessKeyId: S3accessKeyId, secretAccessKey: S3secretAccessKey});
     var params = {
 		Bucket: 'emcphotobooth', /* required */
-		Key: req.params.uniqueurl + '/' + req.body.number + '.png', /* required */
+		Key: req.params.uniqueurl + '/' + req.body.number + '.jpeg', /* required */
 		ACL: 'public-read',
 		Body: buf,
-		ContentType:  'image/png',
+		ContentType:  'image/jpeg',
 		ContentEncoding: 'base64'
 	};
 	s3.putObject(params, function(err, data) {
@@ -221,7 +235,7 @@ router.post('/addpic/:uniqueurl', function(req, res) {
 	});
 
 	mongoose.model('Infophoto').findOneAndUpdate({uniqueurl : req.params.uniqueurl},
-			{$push: {'photos': 'https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/' + req.body.number + '.png'}},
+			{$push: {'photos': 'https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/' + req.body.number + '.jpeg'}},
 		    {safe: true, upsert: true},
 		    function(err, model) {
 		        //console.log(err);
@@ -263,6 +277,47 @@ router.post('/sendmail/:uniqueurl', function(req, res) {
 	 	},
 		json: function(){
 	   		res.json({message : 'email sent successfully'});
+	 	}
+	});
+});
+
+/* POST Send Tweet */
+router.post('/sendtweet/:uniqueurl', function(req, res) {
+	var twitid = req.body.twitid.toString();
+	if(twitid.charAt(0) != '@'){
+		twitid = '@' + twitid;
+	}
+
+	//get the image from S3/ECS that will post a photo to twitter as well
+	request.get('https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/photo2.jpeg', function (error, response, photoboothPic) {
+	    if (!error && response.statusCode == 200) {
+	        //post the image to twitter
+			twitterClient.post('media/upload', { media: photoboothPic }, function (err, media, response) {
+			  // now we can reference the media and post a tweet (media will attach to the tweet)
+			  if(err){
+			  		console.log(err);
+			  } else {
+					var status = { 
+						status: twitid + ' Go check out your EMC World Photobooth Photos at http://emccodephotobooth.cfapps.io/infophotos/' + req.params.uniqueurl,
+						media_ids: media.media_id_string
+					}
+
+					twitterClient.post('statuses/update', status, function (err, tweet, response) {
+						if (!error) {
+					        console.log('Sending tweet to: ' + twitid);
+					    }
+					})
+			  }
+			})
+	    }
+	});
+
+	res.format({
+		text: function(){
+			res.send('success');
+	 	},
+		json: function(){
+	   		res.json({message : 'tweet sent successfully'});
 	 	}
 	});
 });
