@@ -298,7 +298,7 @@ router.post('/sendtweet/:uniqueurl', function(req, res) {
 			  		console.log(err);
 			  } else {
 					var status = { 
-						status: twitid + ' Go check out your EMC World Photobooth Photos at http://emccodephotobooth.cfapps.io/infophotos/' + req.params.uniqueurl,
+						status: twitid + ' Check out your EMC World Photobooth Photos at http://emccodephotobooth.cfapps.io/infophotos/' + req.params.uniqueurl + ' #devopsemc',
 						media_ids: media.media_id_string
 					}
 

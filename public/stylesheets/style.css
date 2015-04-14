@@ -299,12 +299,12 @@ ul {
 /****************************
   TAKE PICTURE STYLES
 ****************************/
-
+/* CAMERA SIZED for 1080p Monitors. Specifically Elo 2440L */
 #camera {
-	width: 55%; 
-	height: 600px;
+	width: 1024px; 
+	height: 768px;
 	float: left;
-	margin: 2.5% 2.5%;
+	margin: 2.5% 5%;
 	padding: 0;
 	position: relative;
 }
@@ -339,6 +339,7 @@ ul {
 }
 
 #thanks {
+  margin-top: 200px;
   width: 100%;
 }
 

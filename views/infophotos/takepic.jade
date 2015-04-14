@@ -2,6 +2,7 @@ extends ../layout
 
 block content
 	script(src='/javascripts/webcam.min.js')
+	h1#look.center  &#x21E7; LOOK AT THE CAMERA &#x21E7;
 	div#camera
 		div#thecam
 	div#takenpics
@@ -156,6 +157,7 @@ block content
 					Webcam.reset();
 					$("#camera").hide();
 					$("#takenpics").hide();
+					$("#look").hide();
 					$("#thanks").show();
 
 					setTimeout(
