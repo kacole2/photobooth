@@ -220,7 +220,7 @@ router.get('/takepic/:uniqueurl', function(req, res) {
 /* POST Add Picture to ECS/S3 */
 router.post('/addpic/:uniqueurl', function(req, res) {
 	buf = new Buffer(req.body.photo.replace(/^data:image\/\w+;base64,/, ""),'base64')
-    var s3 = new AWS.S3({accessKeyId: S3accessKeyId, secretAccessKey: S3secretAccessKey});
+    var s3 = new AWS.S3({accessKeyId: S3accessKeyId, secretAccessKey: S3secretAccessKey, endpoint: S3endpoint, signatureVersion: 'v2'});
     var params = {
 		Bucket: 'emcphotobooth', /* required */
 		Key: req.params.uniqueurl + '/' + req.body.number + '.jpeg', /* required */
