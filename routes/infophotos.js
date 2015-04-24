@@ -148,10 +148,10 @@ router.route('/')
 							  		res.format({
 										html: function(){
 											res.render('infophotos/thanks', {
-										   		title: "Photobooth Registration Success"
+										   		title: "Photo Booth Registration Success"
 									  		});
 											/* If it worked, set the header so the address bar doesn't still say /adduser
-									    	res.location("Photobooth Registration Success");
+									    	res.location("Photo Booth Registration Success");
 									    	// And forward to success page
 						            		res.redirect("../");*/
 										},
@@ -173,7 +173,7 @@ router.route('/')
 
 /* GET New Infophoto page. */
 router.get('/new', function(req, res) {
-    res.render('infophotos/new', { title: 'Photobooth Registration' });
+    res.render('infophotos/new', { title: 'Photo Booth Registration' });
 });
 
 /* GET List of Pictures to be taken */
@@ -208,7 +208,7 @@ router.get('/takepic/:uniqueurl', function(req, res) {
 			res.format({
 				html: function(){
 				   	res.render('infophotos/takepic', {
-				   		title: "Photobooth",
+				   		title: "Photo Booth",
 				  		"infophoto" : infophoto
 			  		});
 			 	}
@@ -220,22 +220,32 @@ router.get('/takepic/:uniqueurl', function(req, res) {
 /* POST Add Picture to ECS/S3 */
 router.post('/addpic/:uniqueurl', function(req, res) {
 	buf = new Buffer(req.body.photo.replace(/^data:image\/\w+;base64,/, ""),'base64')
-    var s3 = new AWS.S3({accessKeyId: S3accessKeyId, secretAccessKey: S3secretAccessKey, endpoint: S3endpoint, signatureVersion: 'v2'});
+    var s3 = new AWS.S3({
+    	accessKeyId: S3accessKeyId, 
+    	secretAccessKey: S3secretAccessKey, 
+    	endpoint: S3endpoint
+    });    
     var params = {
-		Bucket: 'emcphotobooth', /* required */
-		Key: req.params.uniqueurl + '/' + req.body.number + '.jpeg', /* required */
-		ACL: 'public-read',
+		Bucket: 'emcphotobooth', 
+		Key: req.params.uniqueurl + '/' + req.body.number + '.jpeg',
 		Body: buf,
-		ContentType:  'image/jpeg',
-		ContentEncoding: 'base64'
+		ACL: 'public-read',
+		ContentType:  'image/jpeg'
 	};
 	s3.putObject(params, function(err, data) {
-		if (err) console.log(err, err.stack); // an error occurred
-		else     console.log(data);           // successful response
+		if (err) {
+			console.log(err, err.stack); // an error occurred
+		} 
+		else {
+			console.log(data);           // successful response
+		}
 	});
 
 	mongoose.model('Infophoto').findOneAndUpdate({uniqueurl : req.params.uniqueurl},
-			{$push: {'photos': 'https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/' + req.body.number + '.jpeg'}},
+			/* IF AWS */
+			//{$push: {'photos': 'https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/' + req.body.number + '.jpeg'}},
+			/* IF ViPROnline */
+			{$push: {'photos': 'http://' + S3url + '/' + req.params.uniqueurl + '/' + req.body.number + '.jpeg'}},
 		    {safe: true, upsert: true},
 		    function(err, model) {
 		        //console.log(err);
@@ -257,10 +267,10 @@ router.post('/addpic/:uniqueurl', function(req, res) {
 /* POST Send Email */
 router.post('/sendmail/:uniqueurl', function(req, res) {
 	var mailOptions = {
-	    from: 'EMC Code Photobooth <emccode.photobooth@emc.com>', // sender address
+	    from: 'EMC Code Photo Booth <emccode.photobooth@emc.com>', // sender address
 	    to: req.body.email, // list of receivers
-	    subject: 'Your EMC {code} Photobooth Photos!', // Subject line
-	    html: '<!DOCTYPE html><html><body style="width: 100%;"><div style="width: 90%;margin: 1% 5%;"><center><a href="http://emccode.github.io/"><img src="http://emccode.github.io/images/badge.png" style="width:100px;"></a><h1>EMC {code} Photobooth Photos</h1><h2>EMC World Las Vegas</h2><h2>May 4-7, 2015</h2></center><p>Thanks for checking out <a href="http://emccode.github.io/">EMC {code}</a> while you were at EMC World! EMC is committed to the open source movement. EMC is constantly releasing new open source bits and it all lives on the <a href="http://emccode.github.io/">EMC {code} Github</a> page. Also be sure to check out the <a href="http://blog.emccode.com/">EMC {code} Blog</a> frequently for information on some of our latest projects.</p><p>Want to relive those Photobooth moments? Go check out your photos at <a href="http://emccodephotos.cfapps.io/infophotos/' + req.params.uniqueurl + '">' + req.params.uniqueurl + '</a></p><ul style="list-style: none;width: 100%;margin: 0;padding: 0;"><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/photo1.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/photo2.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/photo3.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/photo4.jpeg" style="width: 100%;"></li></ul></div></body></html>'
+	    subject: 'Your EMC {code} Photo Booth Photos!', // Subject line
+	    html: '<!DOCTYPE html><html><body style="width: 100%;"><div style="width: 90%;margin: 1% 5%;"><center><a href="http://emccode.github.io/"><img src="http://emccode.github.io/images/badge.png" style="width:100px;"></a><h1>EMC {code} Photo Booth Photos</h1><h2>EMC World Las Vegas</h2><h2>May 4-7, 2015</h2></center><p>Thanks for checking out <a href="http://emccode.github.io/">EMC {code}</a> while you were at EMC World! EMC is committed to the open source movement. EMC is constantly releasing new open source bits and it all lives on the <a href="http://emccode.github.io/">EMC {code} Github</a> page. Also be sure to check out the <a href="http://blog.emccode.com/">EMC {code} Blog</a> frequently for information on some of our latest projects.</p><p>Want to relive those Photo Booth moments? Go check out your photos at <a href="http://emccodephotos.cfapps.io/infophotos/' + req.params.uniqueurl + '">' + req.params.uniqueurl + '</a></p><ul style="list-style: none;width: 100%;margin: 0;padding: 0;"><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="http://' + S3url + '/' + req.params.uniqueurl + '/photo1.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="http://' + S3url + '/' + req.params.uniqueurl + '/photo2.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="http://' + S3url + '/' + req.params.uniqueurl + '/photo3.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="http://' + S3url + '/' + req.params.uniqueurl + '/photo4.jpeg" style="width: 100%;"></li></ul></div></body></html>'
 	};
 
 	// send mail with defined transport object
@@ -283,13 +293,14 @@ router.post('/sendmail/:uniqueurl', function(req, res) {
 
 /* POST Send Tweet */
 router.post('/sendtweet/:uniqueurl', function(req, res) {
+	console.log('sending tweet');
 	var twitid = req.body.twitid.toString();
 	if(twitid.charAt(0) != '@'){
 		twitid = '@' + twitid;
 	}
 
 	//get the image from S3/ECS that will post a photo to twitter as well
-	request.get('https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/photo2.jpeg', function (error, response, photoboothPic) {
+	request.get('http://' + S3url + '/' + req.params.uniqueurl + '/photo2.jpeg', function (error, response, photoboothPic) {
 	    if (!error && response.statusCode == 200) {
 	        //post the image to twitter
 			twitterClient.post('media/upload', { media: photoboothPic }, function (err, media, response) {
@@ -298,7 +309,7 @@ router.post('/sendtweet/:uniqueurl', function(req, res) {
 			  		console.log(err);
 			  } else {
 					var status = { 
-						status: twitid + ' Check out your EMC World Photobooth Photos at http://emccodephotobooth.cfapps.io/infophotos/' + req.params.uniqueurl + ' #devopsemc',
+						status: twitid + ' Check out your EMC World Photo Booth Photos at http://emcphotobooth.cfapps.io/infophotos/' + req.params.uniqueurl + ' #DevOpsEMC',
 						media_ids: media.media_id_string
 					}
 
@@ -372,7 +383,7 @@ router.route('/:uniqueurl')
 				res.format({
 					html: function(){
 					   	res.render('infophotos/show', {
-					   		title: "Photobooth for " + infophoto.fname,
+					   		title: "Photo Booth for " + infophoto.fname,
 					  		"infophoto" : infophoto
 				  		});
 				 	},
