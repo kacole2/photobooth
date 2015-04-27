@@ -22,24 +22,24 @@ block content
 			br
 			br
 			h2.underline.center If you aren't 
-				b #{infophoto.fname} #{infophoto.lname},  
+				b #{photo.fname} #{photo.lname},  
 				| go back!
 			a(href='javascript:history.back()')
 				img(src='../../images/green_arrow.png' style='width:50%;').center
 		div#thanks
 			h1.center Check out your photos at 
-			h2.center http://emccodephotos.cfapps.io/infophotos/#{infophoto.uniqueurl}
+			h2.center http://photobooth.emccode.com/photos/#{photo.uniqueurl}
 			br
 			br
 			div.thanksImage
 				img(src='../../images/email.png')
 			div.thanksText
-				h2 An email has been sent to #{infophoto.email}
-			if infophoto.twitter != ''
+				h2 An email has been sent to #{photo.email}
+			if photo.twitter != ''
 				div.thanksImage
 					img(src='../../images/twitter.png')
 				div.thanksText
-					h2 A tweet has been sent to #{infophoto.twitter}
+					h2 A tweet has been sent to #{photo.twitter}
 			
 
 	script(type='text/javascript').
@@ -144,7 +144,7 @@ block content
 					$("#photo4").show();
 				});
 				send_email();
-				if('#{infophoto.twitter}' != ''){
+				if('#{photo.twitter}' != ''){
 					send_tweet();
 				}
 				clear_it();
@@ -164,7 +164,7 @@ block content
 						function() 
 					{
 						var url = window.location.href
-						var goToList = url.replace(window.location.pathname, "/infophotos/list")
+						var goToList = url.replace(window.location.pathname, "/photos/list")
 						window.location.href = goToList;
 					}, 10000);
 
@@ -180,7 +180,7 @@ block content
 			function post_photo(photoData, number) {
 				$.ajax({
 					method: "POST",
-					url: "/infophotos/addpic/#{infophoto.uniqueurl}",
+					url: "/photos/addpic/#{photo.uniqueurl}",
 					data: { 
 						photo: photoData, 
 						number: number
@@ -191,9 +191,9 @@ block content
 			function send_email() {
 				$.ajax({
 					method: "POST",
-					url: "/infophotos/sendmail/#{infophoto.uniqueurl}",
+					url: "/photos/sendmail/#{photo.uniqueurl}",
 					data: { 
-						email: '#{infophoto.email}'
+						email: '#{photo.email}'
 					}
 				});
 			}
@@ -201,9 +201,9 @@ block content
 			function send_tweet() {
 				$.ajax({
 					method: "POST",
-					url: "/infophotos/sendtweet/#{infophoto.uniqueurl}",
+					url: "/photos/sendtweet/#{photo.uniqueurl}",
 					data: { 
-						twitid: '#{infophoto.twitter}',
+						twitid: '#{photo.twitter}',
 					}
 				});
 			}

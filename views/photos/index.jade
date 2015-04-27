@@ -9,7 +9,7 @@ block content
         ul#admindb
             li
                 h3 Registered:
-                h3.center #{totalinfophotos}
+                h3.center #{totalphotos}
             li 
                 h3 Pictures Taken:
                 h3.center #{totalpictures}
@@ -32,27 +32,27 @@ block content
                     th.egg Edit
                     th.egg Delete
             tbody
-                each infophoto, i in infophotos
+                each photo, i in photos
                     tr
-                        td #{infophoto.fname}
-                        td #{infophoto.lname}
-                        td #{infophoto.company}
-                        td #{infophoto.title}
-                        td #{infophoto.twitter}
-                        if infophoto.photos.length > 0
+                        td #{photo.fname}
+                        td #{photo.lname}
+                        td #{photo.company}
+                        td #{photo.title}
+                        td #{photo.twitter}
+                        if photo.photos.length > 0
                             td YES
                         else
                             td NO
-                        if infophoto.newsletter == true
+                        if photo.newsletter == true
                             td YES
                         else
                             td NO
                         td 
-                            a(href='/infophotos/#{infophoto.uniqueurl}').btnshow Show
+                            a(href='/photos/#{photo.uniqueurl}').btnshow Show
                         td.egg
-                            a(href='/infophotos/#{infophoto.uniqueurl}/edit').btnedit Edit
+                            a(href='/photos/#{photo.uniqueurl}/edit').btnedit Edit
                         td.egg
-                            form(action='/infophotos/#{infophoto.uniqueurl}/edit',method='post',enctype='application/x-www-form-urlencoded')
+                            form(action='/photos/#{photo.uniqueurl}/edit',method='post',enctype='application/x-www-form-urlencoded')
                                     input(type='hidden',value='DELETE',name='_method')
                                     button(type='submit' class='btndelete').
                                         Delete

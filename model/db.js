@@ -1,5 +1,5 @@
 /* USE FOR CF EMBEDDED SERVICES */
-/*
+
 var mongoose = require('mongoose'),
 	cfenv = require("cfenv");
 
@@ -12,9 +12,8 @@ if (mongoLabUrl == null) {
 	//cloud foundry
 	mongoose.connect(mongoLabUrl);
 }
-*/
 
-/* Production running in MongoLab */
+/* Production running in MongoLab 
 var mongoose = require('mongoose'),
 	nconf = require('nconf');
 
@@ -22,5 +21,5 @@ nconf.file('creds.json');
 var mongoLab = nconf.get('MongoLab');
 
 mongoose.connect(mongoLab);
-
+*/
 

@@ -14,23 +14,23 @@ block content
         div#backgroundWrapper
             ul#showpics
                 li
-                    a(href='#{infophoto.photos[0]}')
-                        img(src="#{infophoto.photos[0]}")
+                    a(href='#{photo.photos[0]}')
+                        img(src="#{photo.photos[0]}")
                 li
-                    a(href='#{infophoto.photos[1]}')
-                        img(src="#{infophoto.photos[1]}")
+                    a(href='#{photo.photos[1]}')
+                        img(src="#{photo.photos[1]}")
                 li
-                    a(href='#{infophoto.photos[2]}')
-                        img(src="#{infophoto.photos[2]}")
+                    a(href='#{photo.photos[2]}')
+                        img(src="#{photo.photos[2]}")
                 li
-                    a(href='#{infophoto.photos[3]}')
-                        img(src="#{infophoto.photos[3]}")
+                    a(href='#{photo.photos[3]}')
+                        img(src="#{photo.photos[3]}")
             div.addspace
             div#banner
                 div#bannerImage.center
                     img(src='../../images/email.png')
                 div#bannerText
-                    if infophoto.newsletter == true
+                    if photo.newsletter == true
                         p.
                             Thanks for being a subscriber to the EMC {code} Newsletter!
                     else
@@ -41,9 +41,9 @@ block content
             div.clearfix
 
 
-            p Twitter Username: #{infophoto.twitter}
-            p Company: #{infophoto.company}
-            p Title: #{infophoto.title}
-            p Do you want to subscribe to the EMC {code} Newsletter? #{infophoto.newsletter}
-            p Which demo was your favorite? #{infophoto.favoritedemo}
-            p What technologies do you want to learn more about? #{infophoto.interests}
+            p Twitter Username: #{photo.twitter}
+            p Company: #{photo.company}
+            p Title: #{photo.title}
+            p Do you want to subscribe to the EMC {code} Newsletter? #{photo.newsletter}
+            p Which demo was your favorite? #{photo.favoritedemo}
+            p What technologies do you want to learn more about? #{photo.interests}
