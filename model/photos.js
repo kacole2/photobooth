@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');  
-var infophotoSchema = new mongoose.Schema({  
+var photoSchema = new mongoose.Schema({  
   fname: { type: String, required: true },
   lname: { type: String, required: true },
   twitter: { type: String, required: false },
@@ -13,4 +13,4 @@ var infophotoSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now },
   uniqueurl: { type: String, unique: true }
 });
-mongoose.model('Infophoto', infophotoSchema); 
+mongoose.model('Photo', photoSchema); 

@@ -9,7 +9,7 @@ block content
 			div#bannerText
 				h1 EMC {code} Photobooth Registration
 		div.clearfix
-		form#formAddInfophoto(name="addinfophoto",method="post",action="/infophotos")
+		form#formAddPhoto(name="addphoto",method="post",action="/photos")
 			div.addspace
 				label(for='fname', class='label') First Name: 
 					span.red *
@@ -109,5 +109,5 @@ block content
 
 	script(type='text/javascript').
 		$( document ).ready(function() {
-			$("#formAddInfophoto").validate();
+			$("#formAddPhoto").validate();
 		}

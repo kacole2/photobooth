@@ -9,13 +9,13 @@ block content
 				h1 Choose Your Name To Get Started
 		div.clearfix
 		ul#list
-			- each infophoto, i in infophotos
+			- each photo, i in photos
 				li
 					div#itemLeft
 						h2.
-							#{infophoto.fname} #{infophoto.lname}
+							#{photo.fname} #{photo.lname}
 					div#itemRight
-						a(href='/infophotos/takepic/#{infophoto.uniqueurl}' class='btn') Take Photobooth Photos!
+						a(href='/photos/takepic/#{photo.uniqueurl}' class='btn') Take Photobooth Photos!
 	div#refresh
 		h2 REFRESH
 		img(src='../../images/refresh.png')

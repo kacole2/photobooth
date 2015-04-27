@@ -55,19 +55,19 @@ router.use(methodOverride(function(req, res){
 
 router.route('/')
 	.get(function(req, res, next) {
-		mongoose.model('Infophoto').find({}, null, {sort: {lname: 1}}, function (err, infophotos) {
+		mongoose.model('Photo').find({}, null, {sort: {lname: 1}}, function (err, photos) {
 		  	if (err) {
 		  		return console.error(err);
 		  	} else {
-		  		var totalinfophotos = 0;
+		  		var totalphotos = 0;
 		  		var totalpictures = 0;
 		  		var subscribers = 0;
-		  		async.each(infophotos, function(infophoto, done){
-		  			totalinfophotos +=1;
-		  			if(infophoto.newsletter == true){
+		  		async.each(photos, function(photo, done){
+		  			totalphotos +=1;
+		  			if(photo.newsletter == true){
 		  				subscribers += 1;
 		  			}
-		  			if(infophoto.photos.length > 0){
+		  			if(photo.photos.length > 0){
 		  				totalpictures += 4;
 		  			}
 		  			done();
@@ -80,16 +80,16 @@ router.route('/')
 				    } else {
 					    res.format({
 							html: function(){
-						    	res.render('infophotos/index', {
+						    	res.render('photos/index', {
 						  			title: "Everyone's Info",
-						  			"infophotos" : infophotos,
-						  			"totalinfophotos" : totalinfophotos,
+						  			"photos" : photos,
+						  			"totalphotos" : totalphotos,
 						  			"totalpictures" : totalpictures,
 						  			"subscribers" : subscribers
 					  			});
 							},
 							json: function(){
-						    	res.json(infophotos);
+						    	res.json(photos);
 							}
 						});
 				    }
@@ -121,13 +121,13 @@ router.route('/')
 	    		fname = fname.capitalizeFirstLetter();
 	    		lname = lname.capitalizeFirstLetter();
 	    		console.log('Trying: ' + uniqueurl);
-	    		mongoose.model('Infophoto').findOne({ uniqueurl: uniqueurl}, function (err, infophoto) {
+	    		mongoose.model('Photo').findOne({ uniqueurl: uniqueurl}, function (err, photo) {
 		    		if (err) {
 		    			console.log(err);
 		    		} else {
-		    			if (infophoto == null){
+		    			if (photo == null){
 		    				goodurl = true;
-		    				mongoose.model('Infophoto').create({
+		    				mongoose.model('Photo').create({
 						    	fname : fname,
 						    	lname : lname,
 						    	email : email,
@@ -138,16 +138,16 @@ router.route('/')
 						    	interests : interests,
 						    	favoritedemo : favoritedemo,
 						    	uniqueurl : uniqueurl
-						    }, function (err, infophoto) {
+						    }, function (err, photo) {
 							  	if (err) {
 							  		console.log(err);
 							  		//return handleError(err);
 							  		res.send("There was a problem adding the information to the database.");
 							  	} else {
-							  		console.log('POST creating new infophoto: ' + infophoto);
+							  		console.log('POST creating new photo: ' + photo);
 							  		res.format({
 										html: function(){
-											res.render('infophotos/thanks', {
+											res.render('photos/thanks', {
 										   		title: "Photo Booth Registration Success"
 									  		});
 											/* If it worked, set the header so the address bar doesn't still say /adduser
@@ -156,7 +156,7 @@ router.route('/')
 						            		res.redirect("../");*/
 										},
 										json: function(){
-									    	res.json(infophoto);
+									    	res.json(photo);
 										}
 									});
 						      	}
@@ -171,27 +171,27 @@ router.route('/')
 	    )
 	});
 
-/* GET New Infophoto page. */
+/* GET New Photo page. */
 router.get('/new', function(req, res) {
-    res.render('infophotos/new', { title: 'Photo Booth Registration' });
+    res.render('photos/new', { title: 'Photo Booth Registration' });
 });
 
 /* GET List of Pictures to be taken */
 router.get('/list', function(req, res) {
-    mongoose.model('Infophoto').find({photos : []}, null, {sort: {lname: 1}}, function (err, infophotos) {
+    mongoose.model('Photo').find({photos : []}, null, {sort: {lname: 1}}, function (err, photos) {
 		if (err) {
 			console.log('GET Error: There was a problem retrieving: ' + err);
 		} else {
-			//console.log('GET Retrieving all empty infophotos: ' + infophotos);
+			//console.log('GET Retrieving all empty photos: ' + photos);
 			res.format({
 				html: function(){
-				   	res.render('infophotos/list', {
+				   	res.render('photos/list', {
 				   		title: "Waiting to Take Photos",
-				  		"infophotos" : infophotos
+				  		"photos" : photos
 			  		});
 			 	},
 				json: function(){
-			   		res.json(infophoto);
+			   		res.json(photo);
 			 	}
 			});
 		}
@@ -200,16 +200,16 @@ router.get('/list', function(req, res) {
 
 /* GET Take Pictures */
 router.get('/takepic/:uniqueurl', function(req, res) {
-    mongoose.model('Infophoto').findOne({uniqueurl : req.params.uniqueurl}, function (err, infophoto) {
+    mongoose.model('Photo').findOne({uniqueurl : req.params.uniqueurl}, function (err, photo) {
 		if (err) {
 			console.log('GET Error: There was a problem retrieving: ' + err);
 		} else {
-			//console.log('GET Retrieving all empty infophotos: ' + infophotos);
+			//console.log('GET Retrieving all empty photos: ' + photos);
 			res.format({
 				html: function(){
-				   	res.render('infophotos/takepic', {
+				   	res.render('photos/takepic', {
 				   		title: "Photo Booth",
-				  		"infophoto" : infophoto
+				  		"photo" : photo
 			  		});
 			 	}
 			});
@@ -241,7 +241,7 @@ router.post('/addpic/:uniqueurl', function(req, res) {
 		}
 	});
 
-	mongoose.model('Infophoto').findOneAndUpdate({uniqueurl : req.params.uniqueurl},
+	mongoose.model('Photo').findOneAndUpdate({uniqueurl : req.params.uniqueurl},
 			/* IF AWS */
 			//{$push: {'photos': 'https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/' + req.body.number + '.jpeg'}},
 			/* IF ViPROnline */
@@ -270,7 +270,7 @@ router.post('/sendmail/:uniqueurl', function(req, res) {
 	    from: 'EMC Code Photo Booth <emccode.photobooth@emc.com>', // sender address
 	    to: req.body.email, // list of receivers
 	    subject: 'Your EMC {code} Photo Booth Photos!', // Subject line
-	    html: '<!DOCTYPE html><html><body style="width: 100%;"><div style="width: 90%;margin: 1% 5%;"><center><a href="http://emccode.github.io/"><img src="http://emccode.github.io/images/badge.png" style="width:100px;"></a><h1>EMC {code} Photo Booth Photos</h1><h2>EMC World Las Vegas</h2><h2>May 4-7, 2015</h2></center><p>Thanks for checking out <a href="http://emccode.github.io/">EMC {code}</a> while you were at EMC World! EMC is committed to the open source movement. EMC is constantly releasing new open source bits and it all lives on the <a href="http://emccode.github.io/">EMC {code} Github</a> page. Also be sure to check out the <a href="http://blog.emccode.com/">EMC {code} Blog</a> frequently for information on some of our latest projects.</p><p>Want to relive those Photo Booth moments? Go check out your photos at <a href="http://emccodephotos.cfapps.io/infophotos/' + req.params.uniqueurl + '">' + req.params.uniqueurl + '</a></p><ul style="list-style: none;width: 100%;margin: 0;padding: 0;"><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="http://' + S3url + '/' + req.params.uniqueurl + '/photo1.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="http://' + S3url + '/' + req.params.uniqueurl + '/photo2.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="http://' + S3url + '/' + req.params.uniqueurl + '/photo3.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="http://' + S3url + '/' + req.params.uniqueurl + '/photo4.jpeg" style="width: 100%;"></li></ul></div></body></html>'
+	    html: '<!DOCTYPE html><html><body style="width: 100%;"><div style="width: 90%;margin: 1% 5%;"><center><a href="http://emccode.github.io/"><img src="http://emccode.github.io/images/badge.png" style="width:100px;"></a><h1>EMC {code} Photo Booth Photos</h1><h2>EMC World Las Vegas</h2><h2>May 4-7, 2015</h2></center><p>Thanks for checking out <a href="http://emccode.github.io/">EMC {code}</a> while you were at EMC World! EMC is committed to the open source movement. EMC is constantly releasing new open source bits and it all lives on the <a href="http://emccode.github.io/">EMC {code} Github</a> page. Also be sure to check out the <a href="http://blog.emccode.com/">EMC {code} Blog</a> frequently for information on some of our latest projects.</p><p>Want to relive those Photo Booth moments? Go check out your photos at <a href="http://photobooth.emccode.com/photos/' + req.params.uniqueurl + '">' + req.params.uniqueurl + '</a></p><ul style="list-style: none;width: 100%;margin: 0;padding: 0;"><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="http://' + S3url + '/' + req.params.uniqueurl + '/photo1.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="http://' + S3url + '/' + req.params.uniqueurl + '/photo2.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="http://' + S3url + '/' + req.params.uniqueurl + '/photo3.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="http://' + S3url + '/' + req.params.uniqueurl + '/photo4.jpeg" style="width: 100%;"></li></ul></div></body></html>'
 	};
 
 	// send mail with defined transport object
@@ -309,7 +309,7 @@ router.post('/sendtweet/:uniqueurl', function(req, res) {
 			  		console.log(err);
 			  } else {
 					var status = { 
-						status: twitid + ' Check out your EMC World Photo Booth Photos at http://emcphotobooth.cfapps.io/infophotos/' + req.params.uniqueurl + ' #DevOpsEMC',
+						status: twitid + ' Check out your EMC World Photo Booth Photos at http://photobooth.emccode.com/photos/' + req.params.uniqueurl + ' #DevOpsEMC',
 						media_ids: media.media_id_string
 					}
 
@@ -336,7 +336,7 @@ router.post('/sendtweet/:uniqueurl', function(req, res) {
 // route middleware to validate :uniqueurl
 router.param('uniqueurl', function(req, res, next, uniqueurl) {
     //console.log('validating ' + uniqueurl + ' exists');
-    mongoose.model('Infophoto').findOne({uniqueurl: uniqueurl}, function (err, infophoto) {
+    mongoose.model('Photo').findOne({uniqueurl: uniqueurl}, function (err, photo) {
 		if (err) {
 			console.log(uniqueurl + ' was not found');
 			res.status(404)
@@ -350,7 +350,7 @@ router.param('uniqueurl', function(req, res, next, uniqueurl) {
 			   		res.json({message : err.status  + ' ' + err});
 			 	}
 			});
-		} else if (infophoto === null) {
+		} else if (photo === null) {
 			console.log(uniqueurl + ' was not found');
 			res.status(404)
 			var err = new Error('Not Found');
@@ -364,7 +364,7 @@ router.param('uniqueurl', function(req, res, next, uniqueurl) {
 			 	}
 			});
 		} else {
-			//console.log(infophoto);
+			//console.log(photo);
 			// once validation is done save the new item in the req
 			req.uniqueurl = uniqueurl;
 			// go to the next thing
@@ -375,20 +375,20 @@ router.param('uniqueurl', function(req, res, next, uniqueurl) {
 
 router.route('/:uniqueurl')
 	.get(function(req, res) {
-		mongoose.model('Infophoto').findOne({uniqueurl : req.params.uniqueurl}, function (err, infophoto) {
+		mongoose.model('Photo').findOne({uniqueurl : req.params.uniqueurl}, function (err, photo) {
 			if (err) {
 				console.log('GET Error: There was a problem retrieving: ' + err);
 			} else {
-				console.log('GET Retrieving uniqueurl: ' + infophoto.uniqueurl);
+				console.log('GET Retrieving uniqueurl: ' + photo.uniqueurl);
 				res.format({
 					html: function(){
-					   	res.render('infophotos/show', {
-					   		title: "Photo Booth for " + infophoto.fname,
-					  		"infophoto" : infophoto
+					   	res.render('photos/show', {
+					   		title: "Photo Booth for " + photo.fname,
+					  		"photo" : photo
 				  		});
 				 	},
 					json: function(){
-				   		res.json(infophoto);
+				   		res.json(photo);
 				 	}
 				});
 			}
@@ -397,20 +397,20 @@ router.route('/:uniqueurl')
 
 router.route('/:uniqueurl/edit')
 	.get(function(req, res) {
-		mongoose.model('Infophoto').findOne({uniqueurl : req.params.uniqueurl}, function (err, infophoto) {
+		mongoose.model('Photo').findOne({uniqueurl : req.params.uniqueurl}, function (err, photo) {
 			if (err) {
 				console.log('GET Error: There was a problem retrieving: ' + err);
 			} else {
-				console.log('GET Retrieving uniqueurl: ' + infophoto.uniqueurl);
+				console.log('GET Retrieving uniqueurl: ' + photo.uniqueurl);
 				res.format({
 					html: function(){
-					   	res.render('infophotos/edit', {
-					   		title: "Edit Info for " + infophoto.fname,
-					  		"infophoto" : infophoto
+					   	res.render('photos/edit', {
+					   		title: "Edit Info for " + photo.fname,
+					  		"photo" : photo
 				  		});
 				 	},
 					json: function(){
-				   		res.json(infophoto);
+				   		res.json(photo);
 				 	}
 				});
 			}
@@ -428,8 +428,8 @@ router.route('/:uniqueurl/edit')
 	    var favoritedemo = req.body.favoritedemo;
 
 	    //find the document by uniqueurl and then update it
-		mongoose.model('Infophoto').findOne({uniqueurl : req.params.uniqueurl}, function (err, infophoto) {
-			infophoto.update({
+		mongoose.model('Photo').findOne({uniqueurl : req.params.uniqueurl}, function (err, photo) {
+			photo.update({
 		    	fname : fname,
 		    	lname : lname,
 		    	twitter : twitter,
@@ -438,19 +438,19 @@ router.route('/:uniqueurl/edit')
 		    	newsletter : newsletter,
 		    	interests : interests,
 		    	favoritedemo : favoritedemo
-		    }, function (err, infophotoID) {
+		    }, function (err, photoID) {
 			  if (err) {
 			  	//return handleError(err);
 			  	res.send("There was a problem updating the information to the database: " + err);
 			  } 
 			  else {
-			  		//console.log('PUT updating uniqueurl: ' + infophoto.uniqueurl);
+			  		//console.log('PUT updating uniqueurl: ' + photo.uniqueurl);
 			  		res.format({
 			  			html: function(){
-						   	res.redirect("/infophotos/" + infophoto.uniqueurl);
+						   	res.redirect("/photos/" + photo.uniqueurl);
 					 	},
 						json: function(){
-					   		res.json(infophoto);
+					   		res.json(photo);
 					 	}
 			  		});
 		       }
@@ -458,22 +458,22 @@ router.route('/:uniqueurl/edit')
 		});
 	})
 	.delete(function (req, res){
-		mongoose.model('Infophoto').findOne({uniqueurl : req.params.uniqueurl}, function (err, infophoto) {
+		mongoose.model('Photo').findOne({uniqueurl : req.params.uniqueurl}, function (err, photo) {
 			if (err) {
 				return console.error(err);
 			} else {
-				infophoto.remove(function (err, infophoto) {
+				photo.remove(function (err, photo) {
 					if (err) {
 						return console.error(err);
 					} else {
-						console.log('DELETE removing uniqueurl: ' + infophoto.uniqueurl);
+						console.log('DELETE removing uniqueurl: ' + photo.uniqueurl);
 						res.format({
 				  			html: function(){
-							   	res.redirect("/infophotos");
+							   	res.redirect("/photos");
 						 	},
 							json: function(){
 						   		res.json({message : 'deleted',
-						   			item : infophoto
+						   			item : photo
 						   		});
 						 	}
 				  		});

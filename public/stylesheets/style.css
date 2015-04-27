@@ -155,7 +155,7 @@ a:hover {
 /****************************
   FORM STYLES
 ****************************/
-#formAddInfophoto, #backgroundWrapper {
+#formAddPhoto, #backgroundWrapper {
   padding: 2.5%;
   width: 95%;
   background-color:rgba(60, 60, 60, 0.9);

@@ -1,10 +1,8 @@
 ---
 applications:
-- name: emcphotobooth
+- name: photobooth
   memory: 1GB
   instances: 1
   path: .
-  domain: cfapps.io
+  domain: emccode.com
   command: npm install && npm start
-  services:
-  - kcoleman-emcphotobooth-mongo
