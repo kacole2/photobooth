@@ -12,19 +12,159 @@ block content
         div.clearfix
         br
         div#backgroundWrapper
-            ul#showpics
-                li
-                    a(href='#{photo.photos[0]}')
-                        img(src="#{photo.photos[0]}")
-                li
-                    a(href='#{photo.photos[1]}')
-                        img(src="#{photo.photos[1]}")
-                li
-                    a(href='#{photo.photos[2]}')
-                        img(src="#{photo.photos[2]}")
-                li
-                    a(href='#{photo.photos[3]}')
-                        img(src="#{photo.photos[3]}")
+            p
+                | Thank you for visiting EMC {code} while you were at EMC World 2015! EMC is committed to open source software and communities. The EMC {code} team is constantly releasing new open source projects and it all lives on the 
+                a(href="http://emccode.github.io/") EMC {code} Github page.
+                |  Also be sure to follow 
+                a(href="https://twitter.com/emccode") @EMCCode
+                |  on Twitter and check the 
+                a(href="http://blog.emccode.com/") EMC {code} Blog
+                |  for frequent updates on our latest projects.
+            h3.center LEARN
+            ul
+                each cl in photo.contentlearn
+                    if cl == 'Docker Hackday'
+                        li Docker Hackday | 
+                            a(href="https://github.com/emccode/training/tree/master/docker-hackday")  https://github.com/emccode/training/tree/master/docker-hackday
+                    else if cl == 'DevOps GeekWeek'
+                        li DevOps GeekWeek | 
+                            a(href="https://github.com/emccode/training/tree/master/devops-geekweek")  https://github.com/emccode/training/tree/master/devops-geekweek
+                    else if cl == 'DevOps Field Accred'
+                        li DevOps Field Accred | 
+                            a(href="https://github.com/emccode/training/tree/master/accreditation")  https://github.com/emccode/training/tree/master/accreditation
+                    else if cl == 'Web Automation Center'
+                        li Web Automation Center | 
+                            a(href="https://github.com/djannot/web-automation-center")  https://github.com/djannot/web-automation-center
+            h3.center CODE
+            ul
+                each cc in photo.contentcode
+                    if cc == 'ScaleIO'
+                        li ScaleIO
+                            ul
+                                li 
+                                    a(href="https://github.com/emccode/SIOToolKit") - https://github.com/emccode/SIOToolKit
+                                li 
+                                    a(href="https://github.com/virtualswede/vagrant-scaleio") - https://github.com/virtualswede/vagrant-scaleio
+                                li 
+                                    a(href="https://github.com/emccode/puppet-scaleio") - https://github.com/emccode/puppet-scaleio
+                                li 
+                                    a(href="https://github.com/emccode/vagrant-puppet-scaleio") - https://github.com/emccode/vagrant-puppet-scaleio
+                                li 
+                                    a(href="https://github.com/djannot/scaleio-docker") - https://github.com/djannot/scaleio-docker
+                                li 
+                                    a(href="http://vdash.cfapps.io/scaleio") - http://vdash.cfapps.io/scaleio
+                                li 
+                                    a(href="https://github.com/emccode/arrowhead") - https://github.com/emccode/arrowhead
+                    else if cc == 'ViPR/ECS'
+                        li ViPR/ECS
+                            ul
+                                li 
+                                    a(href="https://github.com/emccode/Vipruby") - https://github.com/emccode/Vipruby
+                                li 
+                                    a(href="https://github.com/emcvipr/dataservices-sdk-java") - https://github.com/emcvipr/dataservices-sdk-java
+                                li 
+                                    a(href="https://github.com/emcvipr/dataservices-sdk-python") - https://github.com/emcvipr/dataservices-sdk-python
+                                li 
+                                    a(href="https://github.com/emcvipr/dataservices-sdk-dotnet") - https://github.com/emcvipr/dataservices-sdk-dotnet
+                                li 
+                                    a(href="https://github.com/chadlung/viperpy") - https://github.com/chadlung/viperpy
+                                li 
+                                    a(href="https://github.com/emcvipr/mnrcli") - https://github.com/emcvipr/mnrcli
+                                li 
+                                    a(href="https://github.com/emccode/s3motion") - https://github.com/emccode/s3motion
+                                li 
+                                    a(href="https://github.com/emccode/socieidos") - https://github.com/emccode/socieidos
+                                li 
+                                    a(href="https://github.com/kacole2/vipr_scripts") - https://github.com/kacole2/vipr_scripts
+                                li 
+                                    a(href="https://github.com/emcvipr/mnrcli") - https://github.com/emcvipr/mnrcli
+                                li 
+                                    a(href="https://github.com/emcvipr/controller-openstack-cinder") - https://github.com/emcvipr/controller-openstack-cinder
+                    else if cc == 'XtremIO'
+                        li XtremIO
+                            ul
+                                li 
+                                    a(href="https://github.com/bkvarda/xtremlib") - https://github.com/bkvarda/xtremlib
+                                li 
+                                    a(href="https://github.com/evanbattle/XtremIOSnap") - https://github.com/evanbattle/XtremIOSnap
+                                li 
+                                    a(href="https://github.com/shairozan/xsnapcourier") - https://github.com/shairozan/xsnapcourier
+                                li 
+                                    a(href="https://github.com/emc-openstack/xtremio-cinder-driver") - https://github.com/emc-openstack/xtremio-cinder-driver
+                    else if cc == 'VMAX'
+                        li VMAX
+                            ul
+                                li 
+                                    a(href="https://github.com/seancummins/dockerized_symcli") - https://github.com/seancummins/dockerized_symcli
+                                li 
+                                    a(href="https://github.com/seancummins/fast_report") - https://github.com/seancummins/fast_report
+                                li 
+                                    a(href="https://github.com/wmasry/SAN-Commands-Generator") - https://github.com/wmasry/SAN-Commands-Generator
+                                li 
+                                    a(href="https://github.com/emc-openstack/vmax-cinder-driver") - https://github.com/emc-openstack/vmax-cinder-driver
+                    else if cc == 'VMware NSX'
+                        li VMware NSX
+                            ul
+                                li 
+                                    a(href="https://github.com/wallnerryan/nvpnsxapi") - https://github.com/wallnerryan/nvpnsxapi
+                                li 
+                                    a(href="https://github.com/WahlNetwork/nsx-tier-builder") - https://github.com/WahlNetwork/nsx-tier-builder
+                    else if cc == 'vCloud Air'
+                        li vCloud Air
+                            ul
+                                li 
+                                    a(href="https://github.com/emccode/goair") - https://github.com/emccode/goair
+                                li 
+                                    a(href="https://github.com/emccode/core2f") - https://github.com/emccode/core2f
+                    else if cc == 'OpenStack'
+                        li OpenStack
+                            ul
+                                li 
+                                    a(href="https://github.com/emc-openstack/vnx-faulty-device-cleanup") - https://github.com/emc-openstack/vnx-faulty-device-cleanup
+                                li 
+                                    a(href="https://github.com/emcvipr/controller-openstack-cinder") - https://github.com/emcvipr/controller-openstack-cinder
+                                li 
+                                    a(href="https://github.com/emc-openstack/vnx-direct-driver") - https://github.com/emc-openstack/vnx-direct-driver
+                                li 
+                                    a(href="https://github.com/emc-openstack/vmax-cinder-driver") - https://github.com/emc-openstack/vmax-cinder-driver
+                                li 
+                                    a(href="https://github.com/emc-openstack/xtremio-cinder-driver") - https://github.com/emc-openstack/xtremio-cinder-driver
+                                li 
+                                    a(href="https://github.com/emc-openstack/smis-fc-cinder-driver") - https://github.com/emc-openstack/smis-fc-cinder-driver
+                                li 
+                                    a(href="https://github.com/emc-openstack/smis-iscsi-cinder-driver") - https://github.com/emc-openstack/smis-iscsi-cinder-driver
+                                li 
+                                    a(href="https://github.com/emc-openstack/vnxe-cinder-driver") - https://github.com/emc-openstack/vnxe-cinder-driver
+            h3.center DEPLOY
+            ul
+                each cd in photo.contentdeploy
+                    if cd == 's3motion'
+                        li s3motion | 
+                            a(href="https://github.com/emccode/s3motion")  https://github.com/emccode/s3motion
+                    else if cd == 'Socieidos'
+                        li Socieidos | 
+                            a(href="https://github.com/emccode/socieidos")  https://github.com/emccode/socieidos
+                    else if cd == 'VagrantSpice'
+                        li VagrantSpice | 
+                            a(href="https://github.com/emccode/vagrantspice")  https://github.com/emccode/vagrantspice
+                    else if cd == 'Vagrant-ScaleIO'
+                        li Vagrant-ScaleIO | 
+                            a(href="https://github.com/virtualswede/vagrant-scaleio")  https://github.com/virtualswede/vagrant-scaleio
+                    else if cd == 'Puppet-ScaleIO'
+                        li Puppet-ScaleIO | 
+                            a(href="https://github.com/emccode/puppet-scaleio")  https://github.com/emccode/puppet-scaleio
+                    else if cd == 'Dogged'
+                        li Dogged | 
+                            a(href="https://github.com/emccode/dogged")  https://github.com/emccode/dogged
+                    else if cd == 'RexRay'
+                        li RexRay | 
+                            a(href="https://github.com/emccode/rexray")  https://github.com/emccode/rexray
+                    else if cd == 'GoAir'
+                        li GoAir | 
+                            a(href="https://github.com/emccode/goair")   https://github.com/emccode/goair
+                    else if cd == 'Core2F'
+                        li Core2F | 
+                            a(href="https://github.com/emccode/core2f")   https://github.com/emccode/core2f
             div.addspace
             div#banner
                 div#bannerImage.center
@@ -39,11 +179,16 @@ block content
                         div.center
                             a(href="http://visitor.r20.constantcontact.com/d.jsp?llr=qipf4rsab&amp;p=oi&amp;m=1119442091280&amp;sit=7hqmx8ijb&amp;f=928bf5a1-912d-4bcd-bcf4-422e2f9acb40" class="button" style="border:2px solid rgb(91,91,91);color:rgb(67,177,230);display:inline-block;padding:8px 10px;text-shadow:none;border-radius:5px;background-color:rgb(240,240,240);") EMC {code} Newsletter Sign-up
             div.clearfix
-
-
-            p Twitter Username: #{photo.twitter}
-            p Company: #{photo.company}
-            p Title: #{photo.title}
-            p Do you want to subscribe to the EMC {code} Newsletter? #{photo.newsletter}
-            p Which demo was your favorite? #{photo.favoritedemo}
-            p What technologies do you want to learn more about? #{photo.interests}
+            ul#showpics
+                li
+                    a(href='#{photo.photos[0]}')
+                        img(src="#{photo.photos[0]}")
+                li
+                    a(href='#{photo.photos[1]}')
+                        img(src="#{photo.photos[1]}")
+                li
+                    a(href='#{photo.photos[2]}')
+                        img(src="#{photo.photos[2]}")
+                li
+                    a(href='#{photo.photos[3]}')
+                        img(src="#{photo.photos[3]}")

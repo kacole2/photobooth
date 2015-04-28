@@ -193,7 +193,11 @@ block content
 					method: "POST",
 					url: "/photos/sendmail/#{photo.uniqueurl}",
 					data: { 
-						email: '#{photo.email}'
+						email: '#{photo.email}',
+						contentlearn: '#{photo.contentlearn}',
+						contentcode: '#{photo.contentcode}',
+						contentdeploy: '#{photo.contentdeploy}',
+						newsletter: '#{photo.newsletter}'
 					}
 				});
 			}

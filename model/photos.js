@@ -7,8 +7,9 @@ var photoSchema = new mongoose.Schema({
   company: { type: String, required: true },
   title: { type: String, required: true },
   newsletter: Boolean,
-  interests: { type: Array, required: false },
-  favoritedemo: { type: String, required: false },
+  contentlearn: { type: Array, required: false },
+  contentcode: { type: Array, required: false },
+  contentdeploy: { type: Array, required: false },
   photos: { type: Array, required: false },
   date: { type: Date, default: Date.now },
   uniqueurl: { type: String, unique: true }

@@ -106,8 +106,9 @@ router.route('/')
 	    var company = req.body.company;
 	    var title = req.body.title;
 	    var newsletter = req.body.newsletter;
-	    var interests = req.body.interests;
-	    var favoritedemo = req.body.favoritedemo;
+	    var contentlearn = req.body.contentlearn;
+	    var contentcode = req.body.contentcode;
+	    var contentdeploy = req.body.contentdeploy;
 
 	    var uniqueurlIterator = 0;
 	    var uniqueurl = fname.toLowerCase() + lname.toLowerCase() + uniqueurlIterator.toString();
@@ -135,8 +136,9 @@ router.route('/')
 						    	company : company,
 						    	title : title,
 						    	newsletter : newsletter,
-						    	interests : interests,
-						    	favoritedemo : favoritedemo,
+						    	contentlearn : contentlearn,
+						    	contentcode : contentcode,
+						    	contentdeploy : contentdeploy,
 						    	uniqueurl : uniqueurl
 						    }, function (err, photo) {
 							  	if (err) {
@@ -266,11 +268,93 @@ router.post('/addpic/:uniqueurl', function(req, res) {
 
 /* POST Send Email */
 router.post('/sendmail/:uniqueurl', function(req, res) {
-	var mailOptions = {
+
+	var content = '';
+	var newsletter = '';
+
+	if (req.body.contentlearn === undefined || req.body.contentlearn.length == 0) {
+    	// empty
+	} else {
+		content += '<div style="width: 90%; margin: 0 5%;"><h3 style="text-align:center">LEARN</h3><ul>';
+		var clToArray = req.body.contentlearn.split(',');
+		clToArray.forEach(function(cl) {
+		    if(cl == 'Docker Hackday'){
+		    	content += '<li><strong>Docker Hackday</strong> | <a href="https://github.com/emccode/training/tree/master/docker-hackday">https://github.com/emccode/training/tree/master/docker-hackday</a></li>';
+		    } else if (cl == 'DevOps GeekWeek'){
+		    	content += '<li><strong>DevOps GeekWeek</strong> | <a href="https://github.com/emccode/training/tree/master/devops-geekweek">https://github.com/emccode/training/tree/master/devops-geekweek</a></li>';
+		    } else if (cl == 'DevOps Field Accred'){
+		    	content += '<li><strong>DevOps Field Accred</strong> | <a href="https://github.com/emccode/training/tree/master/accreditation">https://github.com/emccode/training/tree/master/accreditation</a></li>';
+		    } else if (cl == 'Web Automation Center'){
+		    	content += '<li><strong>Web Automation Center</strong> | <a href="https://github.com/djannot/web-automation-center">https://github.com/djannot/web-automation-center</a></li>';
+		    } 
+		});
+		content += '</ul></div>';
+	}
+
+	if (req.body.contentcode === undefined || req.body.contentcode.length == 0) {
+    	// empty
+	} else {
+		content += '<div style="width: 90%; margin: 0 5%;"><h3 style="text-align:center">CODE</h3><ul>';
+		var ccToArray = req.body.contentcode.split(',');
+		ccToArray.forEach(function(cc) {
+			if(cc == 'ScaleIO'){
+		    	content += '<li><strong>ScaleIO</strong> <ul><li><a href="https://github.com/emccode/SIOToolKit">https://github.com/emccode/SIOToolKit</a></li><li><a href="https://github.com/virtualswede/vagrant-scaleio">https://github.com/virtualswede/vagrant-scaleio</a></li><li><a href="https://github.com/emccode/puppet-scaleio">https://github.com/emccode/puppet-scaleio</a></li><li><a href="https://github.com/emccode/vagrant-puppet-scaleio">https://github.com/emccode/vagrant-puppet-scaleio</a></li><li><a href="https://github.com/djannot/scaleio-docker">https://github.com/djannot/scaleio-docker</a></li><li><a href="http://vdash.cfapps.io/scaleio">http://vdash.cfapps.io/scaleio</a></li><li><a href="https://github.com/emccode/arrowhead">https://github.com/emccode/arrowhead</a></li></ul>';
+		    } else if (cc == 'ViPR/ECS'){
+		    	content += '<li><strong>ViPR/ECS</strong> <ul><li><a href="https://github.com/emccode/Vipruby">https://github.com/emccode/Vipruby</a></li><li><a href="https://github.com/emcvipr/dataservices-sdk-java">https://github.com/emcvipr/dataservices-sdk-java</a></li><li><a href="https://github.com/emcvipr/dataservices-sdk-python">https://github.com/emcvipr/dataservices-sdk-python</a></li><li><a href="https://github.com/emcvipr/dataservices-sdk-dotnet">https://github.com/emcvipr/dataservices-sdk-dotnet</a></li><li><a href="https://github.com/chadlung/viperpy">https://github.com/chadlung/viperpy</a></li><li><a href="https://github.com/emcvipr/mnrcli">https://github.com/emcvipr/mnrcli</a></li><li><a href="https://github.com/emccode/s3motion">https://github.com/emccode/s3motion</a></li><li><a href="https://github.com/emccode/socieidos">https://github.com/emccode/socieidos</a></li><li><a href="https://github.com/kacole2/vipr_scripts">https://github.com/kacole2/vipr_scripts</a></li><li><a href="https://github.com/emcvipr/controller-openstack-cinder">https://github.com/emcvipr/controller-openstack-cinder</a></li></ul>';
+		    } else if (cc == 'XtremIO'){
+		    	content += '<li><strong>XtremIO</strong> <ul><li><a href="https://github.com/bkvarda/xtremlib">https://github.com/bkvarda/xtremlib</a></li><li><a href="https://github.com/evanbattle/XtremIOSnap">https://github.com/evanbattle/XtremIOSnap</a></li><li><a href="https://github.com/shairozan/xsnapcourier">https://github.com/shairozan/xsnapcourier</a></li><li><a href="https://github.com/emc-openstack/xtremio-cinder-driver">https://github.com/emc-openstack/xtremio-cinder-driver</a></li></ul>';
+		    } else if (cc == 'VMAX'){
+		    	content += '<li><strong>VMAX</strong> <ul><li><a href="https://github.com/seancummins/dockerized_symcli">https://github.com/seancummins/dockerized_symcli</a></li><li><a href="https://github.com/seancummins/fast_report">https://github.com/seancummins/fast_report</a></li><li><a href="https://github.com/wmasry/SAN-Commands-Generator">https://github.com/wmasry/SAN-Commands-Generator</a></li><li><a href="https://github.com/emc-openstack/vmax-cinder-driver">https://github.com/emc-openstack/vmax-cinder-driver</a></li></ul>';
+		    } else if (cc == 'VMware NSX'){
+		    	content += '<li><strong>VMware NSX</strong> <ul><li><a href="https://github.com/wallnerryan/nvpnsxapi">https://github.com/wallnerryan/nvpnsxapi</a></li><li><a href="https://github.com/WahlNetwork/nsx-tier-builder">https://github.com/WahlNetwork/nsx-tier-builder</a></li></ul>';
+		    } else if (cc == 'vCloud Air'){
+		    	content += '<li><strong>vCloud Air</strong> <ul><li><a href="https://github.com/emccode/goair">https://github.com/emccode/goair</a></li><li><a href="https://github.com/emccode/core2f">https://github.com/emccode/core2f</a></li></ul>';
+		    } else if (cc == 'OpenStack'){
+		    	content += '<li><strong>OpenStack</strong> <ul><li><a href="https://github.com/emc-openstack/vnx-faulty-device-cleanup">https://github.com/emc-openstack/vnx-faulty-device-cleanup</a></li><li><a href="https://github.com/emcvipr/controller-openstack-cinder">https://github.com/emcvipr/controller-openstack-cinder</a></li><li><a href="https://github.com/emc-openstack/vnx-direct-driver">https://github.com/emc-openstack/vnx-direct-driver</a></li><li><a href="https://github.com/emc-openstack/vmax-cinder-driver">https://github.com/emc-openstack/vmax-cinder-driver</a></li><li><a href="https://github.com/emc-openstack/xtremio-cinder-driver">https://github.com/emc-openstack/xtremio-cinder-driver</a></li><li><a href="https://github.com/emc-openstack/smis-fc-cinder-driver">https://github.com/emc-openstack/smis-fc-cinder-driver</a></li><li><a href="https://github.com/emc-openstack/smis-iscsi-cinder-driver">https://github.com/emc-openstack/smis-iscsi-cinder-driver</a></li><li><a href="https://github.com/emc-openstack/vnxe-cinder-driver">https://github.com/emc-openstack/vnxe-cinder-driver</a></li></ul>';
+		    }
+		});
+		content += '</ul></div>';
+	}
+
+	if (req.body.contentdeploy === undefined || req.body.contentdeploy.length == 0) {
+    	// empty
+	} else {
+		content += '<div style="width: 90%; margin: 0 5%;"><h3 style="text-align:center">DEPLOY</h3><ul>';
+		var cdToArray = req.body.contentdeploy.split(',');
+		cdToArray.forEach(function(cd) {
+		    if(cd == 's3motion'){
+		    	content += '<li><strong>s3motion</strong> | <a href="https://github.com/emccode/s3motion">https://github.com/emccode/s3motion</a></li>';
+		    } else if (cd == 'Socieidos'){
+		    	content += '<li><strong>Socieidos</strong> | <a href="https://github.com/emccode/socieidos">https://github.com/emccode/socieidos</a></li>';
+		    } else if (cd == 'VagrantSpice'){
+		    	content += '<li><strong>VagrantSpice</strong> | <a href="https://github.com/emccode/vagrantspice">https://github.com/emccode/vagrantspice</a></li>';
+		    } else if (cd == 'Vagrant-ScaleIO'){
+		    	content += '<li><strong>Vagrant-ScaleIO</strong> | <a href="https://github.com/virtualswede/vagrant-scaleio">https://github.com/virtualswede/vagrant-scaleio</a></li>';
+		    } else if (cd == 'Puppet-ScaleIO'){
+		    	content += '<li><strong>Puppet-ScaleIO</strong> | <a href="https://github.com/emccode/puppet-scaleio">https://github.com/emccode/puppet-scaleio</a></li>';
+		    } else if (cd == 'Dogged'){
+		    	content += '<li><strong>Dogged</strong> | <a href="https://github.com/emccode/dogged">https://github.com/emccode/dogged</a></li>';
+		    } else if (cd == 'RexRay'){
+		    	content += '<li><strong>RexRay</strong> | <a href="https://github.com/emccode/rexray">https://github.com/emccode/rexray</a></li>';
+		    } else if (cd == 'GoAir'){
+		    	content += '<li><strong>GoAir</strong> | <a href="https://github.com/emccode/goair">https://github.com/emccode/goair</a></li>';
+		    } else if (cd == 'Core2F'){
+		    	content += '<li><strong>Core2F</strong> | <a href="https://github.com/emccode/core2f">https://github.com/emccode/core2f</a></li>';
+		    } 
+		});
+		content += '</ul></div>';
+	}
+
+	if(req.body.newsletter == false){
+		newsletter += '<p>We noticed you did not get a chance to subscribe to the EMC {code} newletter. Want to now?</p><div style="text-align:center;margin-right:auto;margin-left:auto;"><a href="http://visitor.r20.constantcontact.com/d.jsp?llr=qipf4rsab&amp;p=oi&amp;m=1119442091280&amp;sit=7hqmx8ijb&amp;f=928bf5a1-912d-4bcd-bcf4-422e2f9acb40" class="button" style="border:2px solid rgb(91,91,91);color:rgb(67,177,230);display:inline-block;padding:8px 10px;text-shadow:none;border-radius:5px;background-color:rgb(240,240,240);">EMC {code} Newsletter Sign-up</a></div>'
+	}
+
+	var mailOptions = {	
 	    from: 'EMC Code Photo Booth <emccode.photobooth@emc.com>', // sender address
 	    to: req.body.email, // list of receivers
 	    subject: 'Your EMC {code} Photo Booth Photos!', // Subject line
-	    html: '<!DOCTYPE html><html><body style="width: 100%;"><div style="width: 90%;margin: 1% 5%;"><center><a href="http://emccode.github.io/"><img src="http://emccode.github.io/images/badge.png" style="width:100px;"></a><h1>EMC {code} Photo Booth Photos</h1><h2>EMC World Las Vegas</h2><h2>May 4-7, 2015</h2></center><p>Thanks for checking out <a href="http://emccode.github.io/">EMC {code}</a> while you were at EMC World! EMC is committed to the open source movement. EMC is constantly releasing new open source bits and it all lives on the <a href="http://emccode.github.io/">EMC {code} Github</a> page. Also be sure to check out the <a href="http://blog.emccode.com/">EMC {code} Blog</a> frequently for information on some of our latest projects.</p><p>Want to relive those Photo Booth moments? Go check out your photos at <a href="http://photobooth.emccode.com/photos/' + req.params.uniqueurl + '">' + req.params.uniqueurl + '</a></p><ul style="list-style: none;width: 100%;margin: 0;padding: 0;"><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="http://' + S3url + '/' + req.params.uniqueurl + '/photo1.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="http://' + S3url + '/' + req.params.uniqueurl + '/photo2.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="http://' + S3url + '/' + req.params.uniqueurl + '/photo3.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="http://' + S3url + '/' + req.params.uniqueurl + '/photo4.jpeg" style="width: 100%;"></li></ul></div></body></html>'
+	    html: '<!DOCTYPE html><html><body style="width: 100%;"><div style="width: 90%;margin: 1% 5%;"><center><a href="http://emccode.github.io/"><img src="http://emccode.github.io/images/badge_text.png" style="width:150px;"></a><h1>Photo Booth Photos</h1><h2>EMC World Las Vegas</h2><h2>May 4-7, 2015</h2></center><p>Thank you for visiting <a href="http://emccode.github.io/">EMC {code}</a> while you were at EMC World 2015! EMC is committed to the open source software and communities. EMC is constantly releasing new open source projects and it all lives on the <a href="http://emccode.github.io/">EMC {code} Github</a> page. Also be sure to follow <a href="https://twitter.com/emccode">@EMCCode</a> on twitter and check out the <a href="http://blog.emccode.com/">EMC {code} Blog</a> frequently for updates on our latest projects.</p>' + content + newsletter + '<p>Want to relive those Photo Booth moments? Go check out your photos at <a href="http://photobooth.emccode.com/photos/' + req.params.uniqueurl + '">' + req.params.uniqueurl + '</a></p><ul style="list-style: none;width: 100%;margin: 0;padding: 0;"><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="http://' + S3url + '/' + req.params.uniqueurl + '/photo1.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="http://' + S3url + '/' + req.params.uniqueurl + '/photo2.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="http://' + S3url + '/' + req.params.uniqueurl + '/photo3.jpeg" style="width: 100%;"></li><li style="width: 48%;display: inline-block;margin-top: 5px;margin-bottom: 5px;margin-left: 1%;margin-right: 1%;"><img src="http://' + S3url + '/' + req.params.uniqueurl + '/photo4.jpeg" style="width: 100%;"></li></ul></div></body></html>',
+	    generateTextFromHTML: true
 	};
 
 	// send mail with defined transport object
@@ -424,8 +508,9 @@ router.route('/:uniqueurl/edit')
 	    var company = req.body.company;
 	    var title = req.body.title;
 	    var newsletter = req.body.newsletter;
-	    var interests = req.body.interests;
-	    var favoritedemo = req.body.favoritedemo;
+	    var contentlearn = req.body.contentlearn;
+	    var contentcode = req.body.contentcode;
+	    var contentdeploy = req.body.contentdeploy;
 
 	    //find the document by uniqueurl and then update it
 		mongoose.model('Photo').findOne({uniqueurl : req.params.uniqueurl}, function (err, photo) {
@@ -436,8 +521,9 @@ router.route('/:uniqueurl/edit')
 		    	company : company,
 		    	title : title,
 		    	newsletter : newsletter,
-		    	interests : interests,
-		    	favoritedemo : favoritedemo
+		    	contentlearn : contentlearn,
+				contentcode : contentcode,
+				contentdeploy : contentdeploy
 		    }, function (err, photoID) {
 			  if (err) {
 			  	//return handleError(err);

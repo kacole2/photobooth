@@ -42,7 +42,7 @@ h4 {
   margin: 25px 0px 10px;
 }
 
-p, td, th {
+p, td, th, li {
   font-family: 'Quattrocento Sans', sans-serif;
   font-weight: 400;
   font-size: .95em;
@@ -57,14 +57,14 @@ a {
   font-family: 'Quattrocento Sans', sans-serif;
   font-weight: 400;
   font-size: .96em;
-  color: #3F3F3F;
+  color: #3494d1;
   text-decoration: none;
   transition: all .25s ease-in-out;
 }
 
 a:hover {
   /*color: #32a7e4;*/
-  color: #FFFFFF;
+  color: #8f9190;
 }
 
 #content-wrapper {
@@ -83,6 +83,12 @@ a:hover {
 
 .nomargin {
   margin: 0;
+}
+
+.third {
+  width: 32%;
+  margin: 0 0.5%;
+  float: left;
 }
 
 #banner {
@@ -206,6 +212,7 @@ input[type=radio] {
 
 table {
   width: 100%;
+  text-align: left;
 }
 
 /****************************
