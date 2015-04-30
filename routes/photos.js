@@ -39,10 +39,12 @@ var twitterClient = new twitter({
     access_token_secret: Twitter_access_token_secret 
 })
 
+//used for taking the registration of attendees and capitilizing the first letter of the String
 String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
+//use this for ALL requests
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(methodOverride(function(req, res){
   	if (req.body && typeof req.body === 'object' && '_method' in req.body) {
@@ -53,12 +55,15 @@ router.use(methodOverride(function(req, res){
   	}
 }))
 
+//get the index page that shows everything
 router.route('/')
 	.get(function(req, res, next) {
+		//get all records and sort by lastname
 		mongoose.model('Photo').find({}, null, {sort: {lname: 1}}, function (err, photos) {
 		  	if (err) {
 		  		return console.error(err);
 		  	} else {
+		  		//calculate the total stats for each section
 		  		var totalphotos = 0;
 		  		var totalpictures = 0;
 		  		var subscribers = 0;
@@ -82,7 +87,7 @@ router.route('/')
 							html: function(){
 						    	res.render('photos/index', {
 						  			title: "Everyone's Info",
-						  			"photos" : photos,
+						  			"photos" : photos, //all photos and use dot notation for attributes for each
 						  			"totalphotos" : totalphotos,
 						  			"totalpictures" : totalpictures,
 						  			"subscribers" : subscribers
@@ -98,7 +103,7 @@ router.route('/')
 		});
 	})
 	.post(function(req, res) {
-	    // Get our form values. These rely on the "name" attributes
+	    // Get our form values. These rely on the "name" attributes. Used to create new records/documents in MongoDB
 	    var fname = req.body.fname;
 	    var lname = req.body.lname;
 	    var email = req.body.email;
@@ -109,24 +114,28 @@ router.route('/')
 	    var contentlearn = req.body.contentlearn;
 	    var contentcode = req.body.contentcode;
 	    var contentdeploy = req.body.contentdeploy;
-
+ 		
+ 		//Iterator to allow the same person to come to the photobooth as many times as they want
 	    var uniqueurlIterator = 0;
-	    var uniqueurl = fname.toLowerCase() + lname.toLowerCase() + uniqueurlIterator.toString();
 	    //need to find in mongo by uniqueurl. if exists then add 1 to fname+lname
 	    var goodurl = false;
 
 	    async.until(	
 	    	function (){ return goodurl == true }, 
 	    	function(done){
-	    		uniqueurl = fname.replace(/\s+/g, '').toLowerCase() + lname.replace(/\s+/g, '').toLowerCase() + uniqueurlIterator.toString();
+	    		//uniqueurl concatenates fname, lname, and iterator and removes whitespaces
+	    		var uniqueurl = fname.replace(/\s+/g, '').toLowerCase() + lname.replace(/\s+/g, '').toLowerCase() + uniqueurlIterator.toString();
 	    		fname = fname.capitalizeFirstLetter();
 	    		lname = lname.capitalizeFirstLetter();
 	    		console.log('Trying: ' + uniqueurl);
+	    		//look to see if the uniqueurl exists
 	    		mongoose.model('Photo').findOne({ uniqueurl: uniqueurl}, function (err, photo) {
 		    		if (err) {
 		    			console.log(err);
 		    		} else {
+		    			//if it doesn't and there are no photos yet, then lets create the record. the done() callback will kill the async until loop
 		    			if (photo == null){
+		    				//set the goodurl to true so it won't run again
 		    				goodurl = true;
 		    				mongoose.model('Photo').create({
 						    	fname : fname,
@@ -164,6 +173,7 @@ router.route('/')
 						      	}
 							})
 		    			} else {
+		    				//didn't find anything so add 1 and try again
 		    				uniqueurlIterator += 1;
 		    				done();
 		    			}
@@ -221,7 +231,7 @@ router.get('/takepic/:uniqueurl', function(req, res) {
 
 /* POST Add Picture to ECS/S3 */
 router.post('/addpic/:uniqueurl', function(req, res) {
-	buf = new Buffer(req.body.photo.replace(/^data:image\/\w+;base64,/, ""),'base64')
+	buf = new Buffer(req.body.photo.replace(/^data:image\/\w+;base64,/, ""),'base64') //takes the photo from AJAX call as a buffer
     var s3 = new AWS.S3({
     	accessKeyId: S3accessKeyId, 
     	secretAccessKey: S3secretAccessKey, 
@@ -247,6 +257,7 @@ router.post('/addpic/:uniqueurl', function(req, res) {
 			/* IF AWS */
 			//{$push: {'photos': 'https://' + S3url + '/emcphotobooth/' + req.params.uniqueurl + '/' + req.body.number + '.jpeg'}},
 			/* IF ViPROnline */
+			//add photo URL to the array photos
 			{$push: {'photos': 'http://' + S3url + '/' + req.params.uniqueurl + '/' + req.body.number + '.jpeg'}},
 		    {safe: true, upsert: true},
 		    function(err, model) {
@@ -268,10 +279,11 @@ router.post('/addpic/:uniqueurl', function(req, res) {
 
 /* POST Send Email */
 router.post('/sendmail/:uniqueurl', function(req, res) {
-
+	//empty string that will eventually contain HTML that we add to the email to be sent
 	var content = '';
 	var newsletter = '';
 
+	//the next three sections look at the checkboxes that were checked during registration and adds those to create a custom based email
 	if (req.body.contentlearn === undefined || req.body.contentlearn.length == 0) {
     	// empty
 	} else {
@@ -344,11 +356,11 @@ router.post('/sendmail/:uniqueurl', function(req, res) {
 		});
 		content += '</ul></div>';
 	}
-
+	//create a newsletter signup in case they didn't subscribe during registration
 	if(req.body.newsletter == false){
 		newsletter += '<p>We noticed you did not get a chance to subscribe to the EMC {code} newletter. Want to now?</p><div style="text-align:center;margin-right:auto;margin-left:auto;"><a href="http://visitor.r20.constantcontact.com/d.jsp?llr=qipf4rsab&amp;p=oi&amp;m=1119442091280&amp;sit=7hqmx8ijb&amp;f=928bf5a1-912d-4bcd-bcf4-422e2f9acb40" class="button" style="border:2px solid rgb(91,91,91);color:rgb(67,177,230);display:inline-block;padding:8px 10px;text-shadow:none;border-radius:5px;background-color:rgb(240,240,240);">EMC {code} Newsletter Sign-up</a></div>'
 	}
-
+	//the mailer form
 	var mailOptions = {	
 	    from: 'EMC Code Photo Booth <emccode.photobooth@emc.com>', // sender address
 	    to: req.body.email, // list of receivers
@@ -457,6 +469,7 @@ router.param('uniqueurl', function(req, res, next, uniqueurl) {
 	});
 });
 
+/* GET Show page for a particular user */
 router.route('/:uniqueurl')
 	.get(function(req, res) {
 		mongoose.model('Photo').findOne({uniqueurl : req.params.uniqueurl}, function (err, photo) {
@@ -479,6 +492,7 @@ router.route('/:uniqueurl')
 		});
 	});
 
+/* GET the Edit page for a particular user */
 router.route('/:uniqueurl/edit')
 	.get(function(req, res) {
 		mongoose.model('Photo').findOne({uniqueurl : req.params.uniqueurl}, function (err, photo) {
@@ -501,6 +515,7 @@ router.route('/:uniqueurl/edit')
 		});
 	})
 	.put(function(req, res) {
+		/* PUT the Edit page for a particular user */
 		// Get our form values. These rely on the "name" attributes
 	    var fname = req.body.fname;
 	    var lname = req.body.lname;
@@ -544,6 +559,7 @@ router.route('/:uniqueurl/edit')
 		});
 	})
 	.delete(function (req, res){
+		/* DELETE a particular user */
 		mongoose.model('Photo').findOne({uniqueurl : req.params.uniqueurl}, function (err, photo) {
 			if (err) {
 				return console.error(err);

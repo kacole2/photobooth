@@ -17,8 +17,8 @@ if (mongoLabUrl == null) {
 var mongoose = require('mongoose'),
 	nconf = require('nconf');
 
-nconf.file('creds.json');
-var mongoLab = nconf.get('MongoLab');
+nconf.file('creds.json'); //pull in creds.json file
+var mongoLab = nconf.get('MongoLab'); //we only need the MongoLab [ENV] variable
 
-mongoose.connect(mongoLab);
+mongoose.connect(mongoLab); //make the mongoDB connection
 

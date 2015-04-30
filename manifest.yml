@@ -1,8 +1,8 @@
 ---
 applications:
 - name: photobooth
-  memory: 1GB
-  instances: 1
+  memory: 128M
+  instances: 4
   path: .
   domain: emccode.com
   command: npm install && npm start
