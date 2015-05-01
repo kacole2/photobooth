@@ -9,7 +9,8 @@ var express = require('express'),
 	nodemailer = require('nodemailer'),
 	sesTransport = require('nodemailer-ses-transport'),
 	request = require('request').defaults({ encoding: null }),
-	twitter = require('twitter');
+	twitter = require('twitter'),
+	CCClient = require('constantcontact');
 
 //Pull in credentials from JSON file for everything
 nconf.file('creds.json');
@@ -23,7 +24,10 @@ var S3accessKeyId = nconf.get('S3accessKeyId'),
     Twitter_consumer_key = nconf.get('Twitter_consumer_key'),
     Twitter_consumer_secret = nconf.get('Twitter_consumer_secret'),
     Twitter_access_token = nconf.get('Twitter_access_token'),
-    Twitter_access_token_secret = nconf.get('Twitter_access_token_secret');
+    Twitter_access_token_secret = nconf.get('Twitter_access_token_secret'),
+    ConstantContactKey = nconf.get('ConstantContactKey'),
+    ConstantContactToken = nconf.get('ConstantContactToken'),
+    ConstantContactList = nconf.get('ConstantContactList');
 
 //build the transport layer for creating emails
 var transporter = nodemailer.createTransport(sesTransport({
@@ -38,6 +42,11 @@ var twitterClient = new twitter({
     access_token_key:  Twitter_access_token,
     access_token_secret: Twitter_access_token_secret 
 })
+
+//build the Constant Contact Client for automatically subscribing new users
+var constantContactClient = new CCClient();
+constantContactClient.useKey(ConstantContactKey);
+constantContactClient.useToken(ConstantContactToken);
 
 //used for taking the registration of attendees and capitilizing the first letter of the String
 String.prototype.capitalizeFirstLetter = function() {
@@ -170,6 +179,35 @@ router.route('/')
 									    	res.json(photo);
 										}
 									});
+									//automatically subscribe new users to ConstantContact
+									if (newsletter == 'on'){
+										//create the new contact structure
+										var newContact = {
+											"lists": [
+												{
+												"id": ConstantContactList
+												}
+											],
+											  "company_name": company,
+											  "confirmed": true,
+											  "email_addresses": [
+												{
+												"email_address": email
+												}
+											],
+										  "first_name": fname,
+										  "job_title": title,
+										  "last_name": lname
+										};
+										//add the new contact
+										constantContactClient.contacts.post(newContact, true, function (err, res) {
+										    if (err){ 
+										    	console.log('Error adding to Constant Contact: ' + err); 
+										    } else {
+										    	console.log('New Constant Contact: \n' + res);
+										    }
+										});
+									}
 						      	}
 							})
 		    			} else {
