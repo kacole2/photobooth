@@ -1,7 +1,7 @@
 ---
 applications:
 - name: photobooth
-  memory: 128M
+  memory: 256M
   instances: 4
   path: .
   domain: emccode.com
