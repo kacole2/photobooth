@@ -123,6 +123,7 @@ router.route('/')
 	    var contentlearn = req.body.contentlearn;
 	    var contentcode = req.body.contentcode;
 	    var contentdeploy = req.body.contentdeploy;
+	    var contentsession = req.body.contentsession;
  		
  		//Iterator to allow the same person to come to the photobooth as many times as they want
 	    var uniqueurlIterator = 0;
@@ -157,6 +158,7 @@ router.route('/')
 						    	contentlearn : contentlearn,
 						    	contentcode : contentcode,
 						    	contentdeploy : contentdeploy,
+						    	contentsession : contentsession,
 						    	uniqueurl : uniqueurl
 						    }, function (err, photo) {
 							  	if (err) {
@@ -400,6 +402,13 @@ router.post('/sendmail/:uniqueurl', function(req, res) {
 		});
 		content += '</ul></div>';
 	}
+
+	if (req.body.contentsession === undefined || req.body.contentsession.length == 0) {
+    	// empty
+	} else {
+		content += '<div style="width: 90%; margin: 0 5%;"><h3 style="text-align:center">Thanks for coming out to DevOps @ EMCWorld! See you next year!<br><a href="http://emccode.github.io/devopsemc/">emccode.github.io/devopsemc</a></h3></div>';
+	}
+
 	//create a newsletter signup in case they didn't subscribe during registration
 	if(req.body.newsletter == false){
 		newsletter += '<p>We noticed you did not get a chance to subscribe to the EMC {code} newletter. Want to now?</p><div style="text-align:center;margin-right:auto;margin-left:auto;"><a href="http://visitor.r20.constantcontact.com/d.jsp?llr=qipf4rsab&amp;p=oi&amp;m=1119442091280&amp;sit=7hqmx8ijb&amp;f=928bf5a1-912d-4bcd-bcf4-422e2f9acb40" class="button" style="border:2px solid rgb(91,91,91);color:rgb(67,177,230);display:inline-block;padding:8px 10px;text-shadow:none;border-radius:5px;background-color:rgb(240,240,240);">EMC {code} Newsletter Sign-up</a></div>'

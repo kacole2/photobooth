@@ -40,8 +40,41 @@ block content
 					input(type="checkbox",id='newsletter',name='newsletter', class='checkboxPadding', checked='checked')
 			br
 			br
-			h3.center Which EMC {code} content did you like the best?
-			div.third
+			h3.center Which talks/topics interest you the most?
+			br
+			ul
+				li 
+					input(type="checkbox",id='Linkedin',name='contentsession', value='Linkedin', class='checkboxPadding')
+					label(for='Linkedin', class='label') Shwetabh Mittal, Strategy & Operations at Linkedin : Growing and Running an At-scale Social Platform
+				li
+					input(type="checkbox",id='Dropbox',name='contentsession', value='Dropbox', class='checkboxPadding')
+					label(for='Dropbox', class='label') Steve Marx, Product Manager, Developer Programs at Dropbox : It's complicated: The User/Admin/Developer/Platform Relationship in the Dropbox API
+				li
+					input(type="checkbox",id='Chef',name='contentsession', value='Chef', class='checkboxPadding')
+					label(for='Chef', class='label') Nicole Forsgren, PhD, Director Organizational Performance and Analytics at Chef : DevOps: Next
+				li
+					input(type="checkbox",id='Docker',name='contentsession', value='Docker', class='checkboxPadding')
+					label(for='Docker', class='label') Jonas Rosland, Sr. Developer Advocate with EMC Code : Docker 101
+				li
+					input(type="checkbox",id='Intel',name='contentsession', value='Intel', class='checkboxPadding')
+					label(for='Intel', class='label') Nick Weaver, Director, Intel SDI Labs : The Post-Cloud: Where Google, DevOps and Docker Converge
+				li
+					input(type="checkbox",id='Cloud Foundry',name='contentsession', value='Cloud Foundry', class='checkboxPadding')
+					label(for='Cloud Foundry', class='label') Cornelia Davis, Director of Platform Engineering in the Cloud Foundry team at Pivotal : Competing with Software: It Takes a Platform
+				li
+					input(type="checkbox",id='Puppet',name='contentsession', value='Puppet', class='checkboxPadding')
+					label(for='Puppet', class='label') Carl Caum, Senior Technical Marketing Manager, Puppet Labs : Code IT. Why Infrastructure as Code Matters
+				li
+					input(type="checkbox",id='EMCIT',name='contentsession', value='EMCIT', class='checkboxPadding')
+					label(for='EMCIT', class='label') Steve Gonzales, Principal Cloud Software Engineer, EMC : Managing Automation at Scale
+				li
+					input(type="checkbox",id='Moogsoft',name='contentsession', value='Moogsoft', class='checkboxPadding')
+					label(for='Moogsoft', class='label') Dave Casper, CTO, Moogsoft : A Service Assurance Perspective on DevOps
+				li
+					input(type="checkbox",id='VMware',name='contentsession', value='VMware', class='checkboxPadding')
+					label(for='VMware', class='label') Kit Colbert, CTO and VP, VMware Cloud Native Apps : Cloud Native Apps: Why, What, and How
+			//h3.center Which EMC {code} content did you like the best?
+			//div.third
 				h3.label.nomargin.center LEARN
 				p.label.nomargin.center (training)
 				br
@@ -58,7 +91,7 @@ block content
 					li
 						input(type="checkbox",id='Web Automation Center',name='contentlearn', value='Web Automation Center', class='checkboxPadding')
 						label(for='Web Automation Center', class='label') Web Automation Center
-			div.third
+			//div.third
 				h3.label.nomargin.center CODE
 				p.label.nomargin.center (emc products)
 				br
@@ -85,7 +118,7 @@ block content
 						input(type="checkbox",id='OpenStack',name='contentcode', value='OpenStack', class='checkboxPadding')
 						label(for='OpenStack', class='label') OpenStack
 
-			div.third
+			//div.third
 				h3.label.nomargin.center DEPLOY
 				p.label.nomargin.center (community projects)
 				br

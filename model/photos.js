@@ -10,6 +10,7 @@ var photoSchema = new mongoose.Schema({
   contentlearn: { type: Array, required: false }, //the LEARN content of the signup form 
   contentcode: { type: Array, required: false }, //the CODE content of the signup form
   contentdeploy: { type: Array, required: false }, //the DEPLOY content of the signup form
+  contentsession: { type: Array, required: false }, //the SESSION content of the signup form for DEVOPS Day
   photos: { type: Array, required: false }, //stores the location of the photos in ECS, not the actual photos themself
   date: { type: Date, default: Date.now }, //date of creation
   uniqueurl: { type: String, unique: true } //the URL used for accessing data with the Show view
