@@ -88,6 +88,9 @@ After the photos are displayed, jQuery will show a Thank You page. Multiple AJAX
 Within the email and tweet, a link to `/photos/:uniqueurl` will be given for a user to be able to get to their pictures from any device. This is rendered with `show.jade`.
 ![show](https://s3.amazonaws.com/kennyonetime/emc_photobooth_08.png)
 
+## Future
+1. Complete `edit.jade` so the administrator can edit the complete document. 
+
 ## Contribution
 Create a fork of the project into your own reposity. Make all your necessary changes and create a pull request with a description on what was added or removed and details explaining the changes in lines of code. If approved, project owners will merge it.
 

@@ -390,7 +390,13 @@ router.post('/sendmail/:uniqueurl', function(req, res) {
 		    	content += '<li><strong>GoAir</strong> | <a href="https://github.com/emccode/goair">https://github.com/emccode/goair</a></li>';
 		    } else if (cd == 'Core2F'){
 		    	content += '<li><strong>Core2F</strong> | <a href="https://github.com/emccode/core2f">https://github.com/emccode/core2f</a></li>';
-		    } 
+		    } else if (cd == 'photobooth'){
+		    	content += '<li><strong>photobooth</strong> | <a href="https://github.com/emccode/photobooth">https://github.com/emccode/photobooth</a></li>';
+		    } else if (cd == 'VStriker'){
+		    	content += '<li><strong>VStriker</strong> | <a href="https://github.com/emccode/VStriker">https://github.com/emccode/VStriker</a></li>';
+		    } else if (cd == 'mosaicme'){
+		    	content += '<li><strong>mosaicme</strong> | <a href="https://github.com/emccode/mosaicme">https://github.com/emccode/mosaicme</a></li>';
+		    }
 		});
 		content += '</ul></div>';
 	}

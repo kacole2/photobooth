@@ -308,8 +308,8 @@ ul {
 ****************************/
 /* CAMERA SIZED for 1080p Monitors. Specifically Elo 2440L */
 #camera {
-	width: 1024px; 
-	height: 768px;
+	width: 960px; 
+	height: 720px;
 	float: left;
 	margin: 2.5% 5%;
 	padding: 0;
